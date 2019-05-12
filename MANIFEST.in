@@ -1,0 +1,2 @@
+graft skelpy/templates
+prune skelpy/*/__pycache__
