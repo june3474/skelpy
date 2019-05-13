@@ -243,15 +243,15 @@ def _get_associated_application_linux(filePath):
 def open_with_associated_application(filePath, block=False, *args):
     """Open the file with the associated application using the *"general-purpose opener"* program.
 
-    A *"general-purpose opener"* is a small command-line program which runs the
+    A "*general-purpose opener*" is a small command-line program which runs the
     specified application associated to the file type. In a rough sense,
     what *general-purpose opener* does is like double-clicking the file.
-    Below are well known OSes and their *general-purpose openers*::
+    Below are well-known OSes and their *general-purpose openers*::
 
-        - Linux: ``xdg-open``
-        - Windows: ``start``
-        - OS X: ``open``
-        - Cygwin: ``cygstart``
+        - Linux: xdg-open
+        - Windows: start
+        - OS X: open
+        - Cygwin: cygstart
 
     .. Note::
 
@@ -263,18 +263,18 @@ def open_with_associated_application(filePath, block=False, *args):
         just by invoking the *general-purpose opener* with a file name with those
         options. For example, on Windows::
 
-           start -W sample.txt
+            start -W sample.txt
 
-       would make a text editor such as ``notepad.exe` open the sample.txt file
-       and wait until notepad terminates.
+        would make a text editor such as ``notepad.exe` open the sample.txt file
+        and wait until notepad terminates.
 
-       However, it is **not** possible on linux and cygwin, because their
-       *general-purpose openers* do not have such options.
-       Thus, for the same effect on linux and cygwin, we have to directly run
-       the associated application with the file
+        However, it is **not** possible on linux and cygwin, because their
+        *general-purpose openers* do not have such options.
+        Thus, for the same effect on linux and cygwin, we have to directly run
+        the associated application with the file
 
-       Also be informed that :func:`startfile` function provided by python
-       :mod:`os` module is only for Windows and non-blocking.
+        Also be informed that :func:`startfile` function provided by python
+        :mod:`os` module is only for Windows and non-blocking.
 
     Args:
         filePath (str): the file name(possibly including path) to open

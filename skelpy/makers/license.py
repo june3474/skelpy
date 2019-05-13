@@ -64,7 +64,7 @@ class LicenseMaker(BaseMaker):
 
         license name is case-insensitive.
 
-        .. Notes::
+        .. Note::
 
              Currently supported licenses are::
 
