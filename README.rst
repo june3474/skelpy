@@ -1,50 +1,59 @@
-################
-NOT RELEASED YET
-################
+*skelpy* is a simple template tool to create the directory structure for
+python projects. In addition to creating basic directories and boilerplate files
+for a project, *skelpy* generates several configuration files for widely-used tools.
+Those include:
 
-``*skelpy*`` is a simple template tool to create the directory structure for a python project.
-As this application was written for my personal use at first, it does neither offer
-rich functionaries nor does strictly follow python coding standards such as snake-case naming
-rules.
-If you want a template tool with a broader selection of features, `Cookiecutter`_ ot `PyScaffold`_
-would be a good choice for you.
+    * ``setup.py`` and ``setup.cfg`` for setuptools
+    * ``conf.py``, ``index.rst`` for `sphinx <http://www.sphinx-doc.org/en/master/>`_ documentation
+
+For the complete directory structure and files to be created, see :ref:`quick_start`
+
+Install
+=======
+
+From PyPi
+---------
+On the command line, just type either of belows::
+
+    pip install skelpy
+    or
+    pip install --user skelpy
+
+The first one is for system-wide installation and you may need the administrator
+/root privilege. The second command will install *skelpy* in the user's python
+install directory, which is ~/.local/ on linux and Mac,
+%APPDATA%\Python on Windows.
+
+From Git
+--------
+Another option is to download the zip file from
+`skelpy's repository on Github <https://github.com/june3474/skelpy>`_.
+Follow the link and click the green "Clone or Download" button on the right.
+After downloading the zip file--changing the name of the zip file is OK--,
+you can directly run the zip file as if it were a python module like below::
+
+    python skelpy-master.zip [options_of_skelpy] [project_name_to_create]
 
 
-Features
-========
+Or, if you use Linux or any POSIX-compatible OS, you can make the zip file an executable::
 
-Pure Python, No Dependency
---------------------------
-standard libraries
-복잡한 옵션은 없애고 even zip-executable
-For Python-only distributions, it *should* be straightforward to deploy on all
-platforms where Python can run.
+    $ echo '#!/usr/bin/env python' > skelpy
+    $ cat skelpy-master.zip >> skelpy
+    $ chmod u+x skelpy
 
-For distributions with binary extensions, deployment is major headache.  Not only
-must the extensions be built on all the combinations of operating system and
-hardware platform, but they must also be tested, preferably on continuous
-integration platforms.  The issues are similar to the "multiple Python
-versions" section above, not sure whether this should be a separate section.
-Even on Windows x64, both the 32 bit and 64 bit versions of Python enjoy
-significant usage.
+Codes above are from "The Hitchhiker's Guide to Python" by Kenneth Reitz and Tanya Schlusser.
 
-Work well with Pycharm
-----------------------
-command-line tool but work well with pycharm, a popular IDE for python.
-
-Cross platform, cross python version
-------------------------------------
-
+.. _quick_start:
 
 Quick Start
 ===========
 
-To start a new project, say 'my_project', just type on the command shell::
+To start a new project, say 'my_project', just type on the command line ::
   
-  skel my_project
+   skelpy my_project
 
 This will create a new folder ``my_project`` under the current directory and
-fill the directory with subdirectories and configuration files like below::
+fill the directory with sub-directories and configuration files like below::
 
     'basic' format(default)                   'src' format
 
@@ -68,27 +77,23 @@ fill the directory with subdirectories and configuration files like below::
     └── setup.py                              ├── setup.cfg
                                               └── setup.py
 
-For more options, see ``skelpy -h``
+Which structure to be created depends on the ``--format/-f`` option.
+Also, if you do not provide the project name, *skelpy* will consider the current directory name to
+be the project name.
 
-
-
+For more options, See ``skelpy -h``
 
 License
 =======
-
-``skelpy`` is under `MIT`_ license.
-
+*skelpy* is under `MIT`_ license.
 
 Author
 ======
-
 dks <june3474@gmail.com>
-
 
 Change Log
 ==========
-
-## [1.0.0] - 2018-04-13
+## [1.0.0] - 2019-04-13
 
 
 .. _Pyscaffold: https://pyscaffold.org/en/latest/

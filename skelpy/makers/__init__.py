@@ -31,9 +31,8 @@ def get_maker(mod_name):
 
     """
     try:
-        m = import_module('.' + mod_name, package='skelpy.makers')
+        m = import_module('.' + mod_name, package='makers')
     except ImportError:
         return None
 
     return getattr(m, 'Maker', None)
-
