@@ -9,9 +9,9 @@ import os
 import logging
 from abc import ABCMeta, abstractmethod
 
-from skelpy.utils.helpers import add_metaclass
-from skelpy.utils.logger import Logger
-from skelpy.templates import get_template
+from utils.helpers import add_metaclass
+from utils.logger import Logger
+from templates import get_template
 from . import settings
 
 

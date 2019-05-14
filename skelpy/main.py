@@ -193,7 +193,6 @@ def run(argv=None):
     """driver to run ``skelpy``
 
     """
-
     _setup_logger()
 
     if argv is None:
