@@ -20,4 +20,3 @@ project_name = os.path.basename(project_dir)
 package_dir = os.path.join(project_dir, project_name)
 
 sys.path.insert(0, package_dir)
-
