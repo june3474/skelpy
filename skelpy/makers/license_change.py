@@ -6,7 +6,7 @@ from __future__ import absolute_import, print_function
 
 import os
 
-from skelpy.utils.helpers import read_setup_cfg, get_userName
+from utils.helpers import read_setup_cfg, get_userName
 from . import settings
 from .license import LicenseMaker
 

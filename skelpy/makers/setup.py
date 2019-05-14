@@ -8,7 +8,7 @@ import os
 import sys
 from functools import partial
 
-from skelpy.utils.helpers import read_setup_cfg
+from utils.helpers import read_setup_cfg
 from . import settings
 from .base import BaseMaker
 

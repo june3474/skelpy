@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""This module is for executable zip"""
+"""This module is inserted into the executable zip"""
 
 import sys
 import os

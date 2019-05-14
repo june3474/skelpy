@@ -32,6 +32,7 @@ def get_maker(mod_name):
     """
     try:
         m = import_module('.' + mod_name, package='makers')
+    #: ModuleNotFoundError(python3) is a subclass of ImportError
     except ImportError:
         return None
 
