@@ -29,6 +29,21 @@ def maker():
 def test_update_settings(maker):
     assert settings['testsDir'] == os.path.join(maker.projectDir, 'tests')
 
+def test_create_config_files(maker):
+    with mock.patch.object(maker, 'write_file') as mocked_write:
+        mocked_write.reset_mock()
+        maker._create_config_files()
+        mocked_write.assert_called_with('test_init',
+                                        os.path.join(maker.testsDir, '__init__.py'))
+        mocked_write.assert_any_call('test_main_unittest',
+                                     os.path.join(maker.testsDir, 'test_main.py'))
+
+        mocked_write.reset_mock()
+        maker.test = 'pytest'
+        maker._create_config_files()
+        mocked_write.assert_any_call('test_main_pytest',
+                                     os.path.join(maker.testsDir, 'test_main.py'))
+
 
 @mock.patch('os.mkdir')
 def test_generate(mocked_mkdir, maker):
@@ -52,16 +67,3 @@ def test_generate(mocked_mkdir, maker):
             maker.merge = False
             maker.generate()
             mocked_mkdir.assert_any_call(maker.testsDir, 0o755)
-
-        # test write_file part
-        with mock.patch.object(maker, 'create_dir', return_value=True):
-            mocked_write.reset_mock()
-            maker.generate()
-            mocked_write.assert_called_with('test_main_unittest',
-                                            os.path.join(tempdir, 'tests', 'test_main.py'))
-
-            mocked_write.reset_mock()
-            maker.test = 'pytest'
-            maker.generate()
-            mocked_write.assert_called_with('test_main_pytest',
-                                            os.path.join(tempdir, 'tests', 'test_main.py'))

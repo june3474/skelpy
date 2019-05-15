@@ -40,7 +40,7 @@ class DocMaker(BaseMaker):
         self.docsDir = os.path.join(projectDir, 'docs')
         self.merge = merge
         self.force = force
-        self.TITLE_SUFFIX = "'s Documentation"
+        self.TITLE_SUFFIX = " Documentation"
 
         self._update_settings()
 
@@ -80,9 +80,9 @@ class DocMaker(BaseMaker):
             'make_bat': 'make.bat',
         }
 
-        for k, v in config_files.items():
-            config_file = os.path.join(self.docsDir, v)
-            if not self.write_file(k, config_file):
+        for tpl, target in config_files.items():
+            config_file = os.path.join(self.docsDir, target)
+            if not self.write_file(tpl, config_file):
                 return False
 
         return True

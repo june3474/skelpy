@@ -1,6 +1,6 @@
 *skelpy* is a simple template tool to create the directory structure for
-python projects. In addition to creating basic directories and boilerplate files
-for a project, *skelpy* generates several configuration files for widely-used tools.
+python projects. In addition to creating basic directories for a project,
+*skelpy* generates several configuration files for widely-used tools.
 Those include:
 
     * ``setup.py`` and ``setup.cfg`` for setuptools
@@ -26,13 +26,20 @@ install directory, which is ~/.local/ on linux and Mac,
 
 From Git
 --------
-Another option is to download the zip file from
-`skelpy's repository on Github <https://github.com/june3474/skelpy>`_.
-Follow the link and click the green "Clone or Download" button on the right.
-After downloading the zip file--changing the name of the zip file is OK--,
+Another option is to build an executable zip file. *skelpy*'s ``setup.py``
+can build the zip-formatted executable.
+To do that, run the command below in order::
+
+    $ git clone https://github.com/june3474/skelpy.git
+    $ cd skelpy
+    $ python setup.py ezip
+
+Now you will be able to find in the``dist`` directory an excutable zip file
+named ``skelpy-#.#.#.zip`` where "#.#.#" is the version number.
+Once got the zip file--changing the name of the zip file is OK--,
 you can directly run the zip file as if it were a python module like below::
 
-    python skelpy-master.zip [options_of_skelpy] [project_name_to_create]
+    python skelpy-#.#.#.zip [options_of_skelpy] [project_name_to_create]
 
 
 Or, if you use Linux or any POSIX-compatible OS, you can make the zip file an executable::

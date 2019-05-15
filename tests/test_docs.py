@@ -30,7 +30,7 @@ def maker():
 def test_update_settings(maker):
     maker._update_settings()
     assert settings.get('docsDir') == os.path.join(maker.projectDir, 'docs')
-    assert settings.get('doc_title') == "project's Documentation"
+    assert settings.get('doc_title') == "project Documentation"
 
 
 @mock.patch('os.mkdir')

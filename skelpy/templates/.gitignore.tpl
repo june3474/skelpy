@@ -2,8 +2,6 @@
 *~
 *.py[cod]
 *.so
-*.cfg
-!setup.cfg
 *.orig
 *.log
 *.pot

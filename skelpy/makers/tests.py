@@ -41,11 +41,26 @@ class TestMaker(BaseMaker):
 
         settings.update(info)
 
+    def _create_config_files(self):
+        """create general configuration files"""
+
+        if not self.write_file('test_main_' + self.test,
+                               os.path.join(self.testsDir, 'test_main.py')):
+            return False
+
+        if not self.write_file('test_init',
+                               os.path.join(self.testsDir, '__init__.py')):
+            return False
+
+        return True
+
     def generate(self):
         """Worker method of :class:`TestMaker`"""
 
         if not self.create_dir(self.testsDir):
             return False
 
-        return bool(self.write_file('test_main_' + self.test,
-                                    os.path.join(self.testsDir, 'test_main.py')))
+        if not self._create_config_files():
+            return False
+
+        return True

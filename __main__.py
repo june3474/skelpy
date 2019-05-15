@@ -13,8 +13,8 @@ import os
 
 zipfile = os.path.abspath(os.path.dirname(__file__))
 base_dir, _ = os.path.splitext(os.path.basename(zipfile))
-pkg_dir, _ = base_dir.split('-', 1)
-sys.path.insert(0, os.path.join(zipfile, base_dir, pkg_dir))
+pkg_dir = base_dir.split('-', 1)
+sys.path.insert(0, os.path.join(zipfile, base_dir, pkg_dir[0]))
 
 import main
 

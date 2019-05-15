@@ -9,4 +9,4 @@ try:
 except ImportError:
     from unittest import mock
 
-sys.path.insert(0, os.path.join(${projectDir}, ${projectName}))
+sys.path.insert(0, ${packageDir})

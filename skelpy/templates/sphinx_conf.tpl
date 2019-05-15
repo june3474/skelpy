@@ -16,12 +16,8 @@ import os
 import sys
 from distutils.version import LooseVersion
 
-_docDir = os.path.dirname(__file__)
-_projectDir = os.path.abspath(os.path.join(_docDir, '..'))
-_pkgDir = os.path.join(_projectDir, 'skelpy')
-
-sys.path.insert(0, _projectDir)
-sys.path.insert(0, _pkgDir)
+sys.path.insert(0, ${projectDir})
+sys.path.insert(0, ${packageDir})
 
 # -- Run sphinx-apidoc ------------------------------------------------------
 
@@ -32,7 +28,7 @@ from sphinx.ext import apidoc
 
 _outDir = os.path.join(_docDir, "api")
 
-args = ['-M', '-f', '-o', _outDir, _pkgDir]
+args = ['-M', '-f', '-o', ${docsDir}, ${packageDir}]
 apidoc.main(args)
 
 # -- Project information -----------------------------------------------------
