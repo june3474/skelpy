@@ -216,4 +216,4 @@ class BaseMaker(object):
             bool: True if successful, False otherwise
 
         """
-        pass
+        raise NotImplementedError
