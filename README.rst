@@ -6,7 +6,7 @@ Those include:
     * ``setup.py`` and ``setup.cfg`` for setuptools
     * ``conf.py``, ``index.rst`` for `sphinx <http://www.sphinx-doc.org/en/master/>`_ documentation
 
-For the complete directory structure and files to be created, see :ref:`quick_start`
+For the complete directory structure and files to be created, see `quick_start`_
 
 Install
 =======

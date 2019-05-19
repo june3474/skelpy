@@ -54,7 +54,7 @@ class ezip(sdist):
 
 setup(
     name='skelpy',
-    version='1.0.0',
+    version='1.0.pre',
     python_requires='>=2.7',
     url='https://github.com/dks/skelpy',
     author='dks',
