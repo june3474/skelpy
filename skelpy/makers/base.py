@@ -9,9 +9,9 @@ import os
 import logging
 from abc import ABCMeta, abstractmethod
 
-from utils.helpers import add_metaclass
-from utils.logger import Logger
-from templates import get_template
+from skelpy.utils.helpers import add_metaclass
+from skelpy.utils.logger import Logger
+from skelpy.templates import get_template
 from . import settings
 
 
@@ -165,7 +165,7 @@ class BaseMaker(object):
             tpl = get_template(template)
             if not tpl:
                 self.logger.warning(
-                    "failed to retrieve the template file: '{}'".format(template))
+                    "failed to retrieve the template file: '{}.tpl'".format(template))
                 return
             else:
                 template = tpl

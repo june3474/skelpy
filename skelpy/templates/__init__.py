@@ -29,11 +29,10 @@ def get_template(tpl_name):
         TypeError: if *tpl_name* is not given
 
     """
-
-    file_name = "{name}.tpl".format(name=tpl_name)
+    file = "{name}.tpl".format(name=tpl_name)
     try:
-        data = get_data(__name__, file_name)
-    except Exception:
+        data = get_data(__name__, file)
+    except (IOError, FileNotFoundError):
         return
 
     return string.Template(data.decode(encoding='utf8'))

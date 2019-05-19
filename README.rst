@@ -34,12 +34,12 @@ To do that, run the command below in order::
     $ cd skelpy
     $ python setup.py ezip
 
-Now you will be able to find in the``dist`` directory an excutable zip file
-named ``skelpy-#.#.#.zip`` where "#.#.#" is the version number.
+Now you will be able to find an excutable zip file named ``skelpy.zip``
+in the``dist`` directory .
 Once got the zip file--changing the name of the zip file is OK--,
 you can directly run the zip file as if it were a python module like below::
 
-    python skelpy-#.#.#.zip [options_of_skelpy] [project_name_to_create]
+    python skelpy.zip [options_for_skelpy] [project_name_to_create]
 
 
 Or, if you use Linux or any POSIX-compatible OS, you can make the zip file an executable::
@@ -84,9 +84,10 @@ fill the directory with sub-directories and configuration files like below::
     └── setup.py                              ├── setup.cfg
                                               └── setup.py
 
-Which structure to be created depends on the ``--format/-f`` option.
-Also, if you do not provide the project name, *skelpy* will consider the current directory name to
-be the project name.
+You can choose which tructure to use with the ``--format/-f`` option.
+Also, if you do not provide the project name, *skelpy* will consider
+the current directory name(the last component of the current working directory)
+to be the project name.
 
 For more options, See ``skelpy -h``
 

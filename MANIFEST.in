@@ -1,2 +1,2 @@
-graft skelpy/templates
+recursive-include skelpy/templates *.tpl
 prune skelpy/*/__pycache__

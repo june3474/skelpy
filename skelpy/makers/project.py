@@ -9,7 +9,7 @@ from __future__ import absolute_import, print_function
 import os
 from tempfile import gettempdir
 
-from utils import opener, helpers
+from skelpy.utils import opener, helpers
 from . import get_maker, settings
 from .base import BaseMaker
 from .license import LicenseMaker

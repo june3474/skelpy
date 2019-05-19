@@ -1,23 +1,55 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
 
+from distutils import dir_util
+from distutils.filelist import FileList
 from setuptools import find_packages, setup
 from setuptools.command.sdist import sdist
 
 
 class ezip(sdist):
-    description = "create an executable zip-formatted source distribution"
+    """Create the ezip distribution.
 
-    def finalize_options(self):
-        sdist.finalize_options(self)
-        self.formats = ['zip']
+    The ezip distribution is a zip-formatted source distribution which can
+    can be run directly as if it were a python module.
+    """
+    description = "create a zip-formatted executable"
 
     def run(self):
-        sdist.run(self)
+        self.filelist = FileList()
+        self.get_file_list()
 
-        from zipfile import ZipFile
-        with ZipFile(self.archive_files[0], 'a') as zfile:
-            zfile.write('__main__.py')
+        self.make_distribution()
+
+        dist_files = getattr(self.distribution, 'dist_files', [])
+        for file in self.archive_files:
+            data = ('ezip', '', file)
+            if data not in dist_files:
+                dist_files.append(data)
+
+    def make_distribution(self):
+        with self._remove_os_link():       # Workaround for #516
+            base_dir = self.distribution.get_fullname()
+            ezip_name = os.path.join(self.dist_dir,
+                                     self.distribution.get_name())
+
+            self.make_release_tree(base_dir, self.filelist.files)
+            archive_files = []             # remember names of files we create
+
+            file = self.make_archive(ezip_name, 'zip',
+                                     root_dir=base_dir,
+                                     owner=self.owner, group=self.group)
+            from zipfile import ZipFile
+            with ZipFile(file, 'a') as zfile:
+                zfile.write('__main__.py')
+
+            archive_files.append(file)
+            self.distribution.dist_files.append(('ezip', '', file))
+            self.archive_files = archive_files
+
+            if not self.keep_temp:
+                dir_util.remove_tree(base_dir, dry_run=self.dry_run)
 
 
 setup(
@@ -31,7 +63,10 @@ setup(
     license='NEW-BSD',
     package_dir={'': '.'},
     packages=find_packages(where='.', exclude=['docs', 'tests', 'tests.*']),
-    zip_safe=True,
+    package_data={
+        'skelpy.templates': ['*.tpl', '.gitignore.tpl', '.editorconfig.tpl'],
+    },
+    zip_safe=False,
     include_package_data=True,
     scripts=[],
     entry_points={

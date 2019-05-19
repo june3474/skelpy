@@ -11,8 +11,8 @@ import sys
 import logging
 import os
 
-from makers import settings, get_maker
-from utils.defaultsubparse import DefaultSubcommandArgParser
+from skelpy.makers import settings, get_maker
+from skelpy.utils.defaultsubparse import DefaultSubcommandArgParser
 
 
 def _setup_arg_parser():
