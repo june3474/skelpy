@@ -101,7 +101,7 @@ dks <june3474@gmail.com>
 
 Change Log
 ==========
-## [1.0.0] - 2019-04-13
+## [1.0.rc0] - 2019-04-13
 
 
 .. _Pyscaffold: https://pyscaffold.org/en/latest/
