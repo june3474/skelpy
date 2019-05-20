@@ -328,7 +328,6 @@ def add_metaclass(metaclass):
     """Class decorator for creating a class with a metaclass.
 
     This function was copied from `six library <https://pypi.org/project/six>`_
-
     """
     def wrapper(cls):
         orig_vars = cls.__dict__.copy()
@@ -342,3 +341,20 @@ def add_metaclass(metaclass):
         orig_vars.pop('__weakref__', None)
         return metaclass(cls.__name__, cls.__bases__, orig_vars)
     return wrapper
+
+
+def is_rootDir(path):
+    """check if the path given is the root directory
+
+    Args:
+        path (str): path to check
+
+    Returns:
+        bool: True if the *path* is root directory, False otherwise
+    """
+    assert path is not None
+
+    if path == '' or os.sep not in path:
+        return False
+
+    return os.path.dirname(path) == path

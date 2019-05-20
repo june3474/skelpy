@@ -75,3 +75,8 @@ def test_create_miscellaneous(maker):
         assert mocked_write.call_args == ((mock.ANY, gitignore),)
         maker._create_miscellaneous()
         assert mocked_write.assert_not_called
+
+
+def test_run_subworkers(maker):
+    # all tests are done in the tests of sub-makers and the maker package.
+    pass

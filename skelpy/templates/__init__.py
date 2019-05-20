@@ -30,9 +30,16 @@ def get_template(tpl_name):
 
     """
     file = "{name}.tpl".format(name=tpl_name)
+
+    #: for python 2.7
+    try:
+        FileNotFoundError
+    except NameError:
+        FileNotFoundError = IOError
+
     try:
         data = get_data(__name__, file)
-    except (IOError, FileNotFoundError):
+    except FileNotFoundError:
         return
 
     return string.Template(data.decode(encoding='utf8'))

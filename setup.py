@@ -60,7 +60,7 @@ setup(
     author='dks',
     author_email='june3474@gmail.com',
     description='A simple template tool to create the skeleton for a python project',
-    license='MIT',
+    license='NEW-BSD',
     package_dir={'': '.'},
     packages=find_packages(where='.', exclude=['docs', 'tests', 'tests.*']),
     package_data={

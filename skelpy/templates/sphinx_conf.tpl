@@ -10,25 +10,22 @@
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
+# documentation root, use os.path.abspath to make it absolute.
 #
 import os
 import sys
 from distutils.version import LooseVersion
+from sphinx.ext import apidoc
 
 sys.path.insert(0, ${projectDir})
-sys.path.insert(0, ${packageDir})
 
 # -- Run sphinx-apidoc ------------------------------------------------------
 
 # run `sphinx-apidoc` before running `sphinx-build`
 # see https://github.com/rtfd/readthedocs.org/issues/1139
 
-from sphinx.ext import apidoc
-
-_outDir = os.path.join(_docDir, "api")
-
-args = ['-M', '-f', '-o', ${docsDir}, ${packageDir}]
+_outDir = os.path.join(${docsDir}, "api")
+args = ['-M', '-f', '-o', _outDir, ${packageDir}]
 apidoc.main(args)
 
 # -- Project information -----------------------------------------------------

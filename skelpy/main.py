@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 """entry point to skelpy
 
-main.py is the front-end module that parses the command line options and creates the project-structure accordingly.
+main.py is the front-end module that parses the command line options and creates
+the project-structure accordingly.
 """
 
 from __future__ import absolute_import, print_function
@@ -22,8 +23,8 @@ def _setup_arg_parser():
     parser = DefaultSubcommandArgParser()
     subparsers = parser.add_subparsers(title='sub-command')
 
-    # main options
-    # setting 'prog' prevents showing subparser's name in the usage output
+    #: main options
+    #: setting 'prog' prevents showing subparser's name in the usage output
     main_parser = subparsers.add_parser('template',
                                         prog='skelpy',
                                         description='A simple template tool for a python project.',
@@ -46,7 +47,7 @@ def _setup_arg_parser():
     main_parser.add_argument('-v', '--verbose', action='store_true',
                              help='show verbose messages [default: %(default)s]')
 
-    # license sub-command options
+    #: license sub-command options
     lic_parser = subparsers.add_parser('license', prog='skelpy license')
     lic_parser.add_argument('license', metavar='LICENSE', nargs='?', default=None,
                             help='new license to create or change to')
@@ -55,17 +56,17 @@ def _setup_arg_parser():
     lic_parser.add_argument('-v', '--verbose', action='store_false',
                             help='show verbose messages [default: %(default)s]')
 
-    # assign a front-end function to each sub-parser
+    #: assign a front-end function to each sub-parser
     main_parser.set_defaults(func=_skel)
     lic_parser.set_defaults(func=_license)
-    # set the default sub-parser to main_parser
+    #: set the default sub-parser to main_parser
     parser.set_default_subparser('template')
-    # combine usage messages of main_parser and lic_parser
+    #: combine usage messages of main_parser and lic_parser
     main_parser.usage = parser.combine_usage([main_parser, lic_parser])
-    # replace the top-most parser's usage and help messages for main sub-parser's
+    #: replace the top-most parser's usage and help messages for main sub-parser's
     parser.format_usage = main_parser.format_usage
     parser.format_help = main_parser.format_help
-    # for easy reference to sub-parsers
+    #: for easy reference to sub-parsers
     parser.main_parser = main_parser
     parser.lic_parser = lic_parser
 
@@ -107,15 +108,11 @@ def _parse_projectName(projectName):
         projectName = os.path.split(projectDir)[-1]
 
     else:
+        #: remove trailing os.sep
         if projectName.endswith(os.sep):
-            sys.stdout.write(
-                "[skelpy] " +
-                'Project name should NOT end with "{}"\n'.format(repr(os.sep)),
-                ' ' * len("[skelpy] ") +
-                'Trailing "{}" will be removed\n'.format(repr(os.sep)))
             projectName = projectName[:-1]
 
-        # abspath() includes normpath()
+        #: abspath() includes normpath()
         projectDir = os.path.abspath(projectName)
         projectName = os.path.split(projectDir)[-1]
 
@@ -137,23 +134,13 @@ def _skel(opts, parser):
     opts['projectDir'], opts['projectName'] = _parse_projectName(opts['projectName'])
     settings.update(opts)
 
-    makers = [
-        'project',
-        'package',
-        'docs',
-        'tests',
-    ]
+    maker_cls = get_maker('project')
+    if not maker_cls:
+        return False
 
-    for m in makers:
-        maker_cls = get_maker(m)
-        if not maker_cls:
-            sys.stderr.write("[skelpy] " +
-                             "Maker module not found: '{}'\n".format(m + '.py'))
-            return False
-
-        maker = maker_cls(**settings)
-        if not maker.generate():
-            return False
+    maker = maker_cls(**settings)
+    if not maker.generate():
+        return False
 
     return True
 
@@ -170,7 +157,7 @@ def _license(opts, parser):
         None
 
     """
-    # if neither list option nor license argument is given
+    #: if neither list option nor license argument is given
     if not opts.get('list') and not opts.get('license'):
         # ArgumentParser.error() terminates the process.
         # no need to call return of sys.exit()

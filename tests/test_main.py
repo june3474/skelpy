@@ -6,7 +6,11 @@
 
 from __future__ import absolute_import, print_function
 
-import pytest
+from skelpy import main
+
+
+def test_parse_projecName(path):
+    main._parse_projectName(path)
 
 
 def test_main():

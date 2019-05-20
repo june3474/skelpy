@@ -14,6 +14,7 @@ Attributes:
 
 from __future__ import absolute_import, print_function
 
+import sys
 from importlib import import_module
 
 settings = {}
@@ -34,6 +35,8 @@ def get_maker(mod_name):
         m = import_module('.' + mod_name, package='skelpy.makers')
     #: ModuleNotFoundError(python3) is a subclass of ImportError
     except ImportError:
+        sys.stderr.write("[skelpy] " +
+                         "Maker module not found: '{}'\n".format(mod_name + '.py'))
         return None
 
     return getattr(m, 'Maker', None)

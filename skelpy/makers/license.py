@@ -40,7 +40,13 @@ class LicenseMaker(BaseMaker):
         force (bool): option for overwriting  if the file exists.
         license (str): license to create.
 
+    Attributes:
+        default_license (str): default license(class variable)
+
     """
+    #: class variable
+    default_license = 'MIT'
+
     def __init__(self, projectDir, force, license, **kwargs):
         self.projectDir = projectDir
         self.force = force

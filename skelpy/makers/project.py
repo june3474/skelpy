@@ -16,7 +16,7 @@ from .license import LicenseMaker
 
 
 class ProjectMaker(BaseMaker):
-    """*Maker* class to create the project directory
+    """The master *Maker* class responsible for creating the whole project tree
 
     After creating the project directory, ``ProjectMaker`` creates several
     configuration files in the directory using the appropriate *Maker*.
@@ -27,6 +27,9 @@ class ProjectMaker(BaseMaker):
         * LICENSE
         * README.rst
         * .gitignore
+
+    Then ``ProjectMaker`` creates and runs three sub-makers:
+    ``PackageMaker``, ``DockMaker``, ``TestMaker``.
 
     Args:
         projectName (str): project name, in effect, the directory to create.
@@ -41,9 +44,7 @@ class ProjectMaker(BaseMaker):
         merge (bool): whether to overlap the project directory if the directory
             already exists
         force (bool): whether to overwrite if the file with the same name already exists
-
     """
-
     def __init__(self, projectDir, projectName, quiet, merge, force, **kwargs):
         self.projectDir = projectDir
         self.projectName = projectName
@@ -51,7 +52,6 @@ class ProjectMaker(BaseMaker):
         self.merge = merge
         self.force = force
 
-        self.default_license = 'MIT'
         self._update_info()
 
     def _update_info(self):
@@ -61,7 +61,7 @@ class ProjectMaker(BaseMaker):
             'author': helpers.get_userName(),
             'author_email': helpers.get_email(),
             'version': '1.0.0',
-            'license': self.default_license,
+            'license': LicenseMaker.default_license,
             'description': 'ADD SHORT DESCRIPTION ON THE PROJECT HERE'}
 
         settings.update(defaults)
@@ -114,15 +114,14 @@ class ProjectMaker(BaseMaker):
 
         """
         license = settings.get('license')
-        #LicenseMaker = get_maker('license')
 
         if not LicenseMaker.is_supported_license(license):
             self.logger.info(
                 "Invalid license: '{}'\n".format(license)
-                + "default '{}' license will be used.\n".format(self.default_license)
+                + "default '{}' license will be used.\n".format(LicenseMaker.default_license)
                 + "* You can change the license later with 'license' sub-command.\n"
                 + "For help, see 'skelpy license -h/--help'.")
-            settings['license'] = self.default_license
+            settings['license'] = LicenseMaker.default_license
         else:
             settings['license'] = license.upper()
 
@@ -141,9 +140,7 @@ class ProjectMaker(BaseMaker):
         for m in makers:
             maker_cls = get_maker(m)
             if not maker_cls:
-                self.logger.warning(
-                    "module not found: '{}'".format(m + '.py')
-                    + '   skipping...')
+                self.logger.warning('   skipping...')
                 continue
 
             maker = maker_cls(**settings)
@@ -181,6 +178,29 @@ class ProjectMaker(BaseMaker):
 
         return True
 
+    def _run_subworkers(self):
+        """ create & run sub-makers
+
+        Returns:
+            bool: True if successful, False otherwise
+        """
+        makers = [
+            'package',
+            'docs',
+            'tests',
+        ]
+
+        for m in makers:
+            maker_cls = get_maker(m)
+            if not maker_cls:
+                return False
+
+            maker = maker_cls(**settings)
+            if not maker.generate():
+                return False
+
+        return True
+
     def generate(self):
         """Worker method of :class:`ProjectMaker`
 
@@ -200,6 +220,9 @@ class ProjectMaker(BaseMaker):
             return False
 
         if not self._create_miscellaneous():
+            return False
+
+        if not self._run_subworkers():
             return False
 
         return True
