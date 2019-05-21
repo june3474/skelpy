@@ -32,7 +32,7 @@ def _setup_arg_parser():
                                         epilog="For the 'license' sub-command, see 'skelpy license --help'.")
 
     main_parser.add_argument('projectName', metavar='ProjectName', nargs='?',
-                             default=None, help='project(directory) name to create')
+                             default='', help='project(directory) name to create')
     main_parser.add_argument('-F', '--format', default='basic',
                              choices=['basic', 'src'],
                              help='format of directory structure [default: %(default)s]')
@@ -104,6 +104,8 @@ def _parse_projectName(projectName):
                ``os.path.split(projectDir)[-1] == projectName``
 
     """
+    root = helpers.root_path()
+
     if not projectName:
         projectDir = os.getcwd()
         #: run in the root directory but did not provide project name
@@ -111,7 +113,8 @@ def _parse_projectName(projectName):
             return projectDir, ''
         #: not in the root directory
         projectName = os.path.split(projectDir)[-1]
-
+    elif os.path.abspath(projectName) == root:   # maybe too much?
+        return root, ''
     else:
         #: remove trailing os.sep
         if projectName.endswith(os.sep):

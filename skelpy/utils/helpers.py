@@ -356,3 +356,11 @@ def is_rootDir(path):
         return False
 
     return os.path.dirname(path) == path
+
+
+def root_path():
+    """get the root path
+
+    This function is OS-independent.
+    """
+    return os.path.abspath(os.sep)
