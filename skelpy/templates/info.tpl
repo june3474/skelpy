@@ -1,8 +1,9 @@
 #--------------------------------------------------------------------------
-# 'skelpy' needs a little information about the project and author.
-# This information will be used to generate setup.cfg and setup.py
-# You can change the info later by editing setup.cfg and setup.py directly.
+# 'skelpy' needs a little more information about the project.
+# This minimum information is essential to create your project,
+# and will be used to generate setup.cfg and setup.py properly.
 #
+# You can change the info later by editing setup.cfg and setup.py manually.
 # If you prefer to skip this process(thereby, applying defaults) and to
 # edit the two files later, use -q/--quiet option
 #--------------------------------------------------------------------------
@@ -13,9 +14,8 @@ version = 1.0.0
 description = ADD SHORT DESCRIPTION ON THE PROJECT HERE
 url = https://github.com/${author}/${projectName}
 license = MIT
-
 # Supported Licenses
-#-------------------
+#-----------------------------------------------------------
 # APACHE: Apache License
 # CC0: Creative Commons License for public domain
 # GPL2: GNU General Public License v2.0
@@ -27,6 +27,7 @@ license = MIT
 # NEW-BSD: New BSD(Berkeley Software Distribution) License
 # SIMPLE-BSD: Simplified BSD License
 # PROPRIETARY: Proprietary License
+#-----------------------------------------------------------
 
 [Author]
 # Add more authors if any (comma-separated)

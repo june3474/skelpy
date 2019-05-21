@@ -40,9 +40,6 @@ class ezip(sdist):
             file = self.make_archive(ezip_name, 'zip',
                                      root_dir=base_dir,
                                      owner=self.owner, group=self.group)
-            from zipfile import ZipFile
-            with ZipFile(file, 'a') as zfile:
-                zfile.write('__main__.py')
 
             archive_files.append(file)
             self.distribution.dist_files.append(('ezip', '', file))
