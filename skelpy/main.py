@@ -14,6 +14,7 @@ import os
 
 from skelpy.makers import settings, get_maker
 from skelpy.utils.defaultsubparse import DefaultSubcommandArgParser
+import skelpy.utils.helpers as helpers
 
 
 def _setup_arg_parser():
@@ -105,13 +106,18 @@ def _parse_projectName(projectName):
     """
     if not projectName:
         projectDir = os.getcwd()
+        #: run in the root directory but did not provide project name
+        if helpers.is_rootDir(projectDir):
+            return projectDir, ''
+        #: not in the root directory
         projectName = os.path.split(projectDir)[-1]
 
     else:
         #: remove trailing os.sep
         if projectName.endswith(os.sep):
-            projectName = projectName[:-1]
+            projectName, _ = os.path.split(projectName)
 
+        #: if the path given is not absolute, abspath() returns getcwd() + path
         #: abspath() includes normpath()
         projectDir = os.path.abspath(projectName)
         projectName = os.path.split(projectDir)[-1]
@@ -131,7 +137,14 @@ def _skel(opts, parser):
         bool
 
     """
-    opts['projectDir'], opts['projectName'] = _parse_projectName(opts['projectName'])
+    projectDir, projectName = _parse_projectName(opts['projectName'])
+    if not projectName:
+        sys.stderr.write(
+            "[skelpy] Invalid project name: {}\n".format(projectName))
+        return False
+
+    opts['projectDir'] = projectDir
+    opts['projectName'] = projectName
     settings.update(opts)
 
     maker_cls = get_maker('project')
@@ -168,8 +181,7 @@ def _license(opts, parser):
     maker_cls = get_maker('license_change')
     if not maker_cls:
         sys.stderr.write(
-            "[skelpy] " +
-            "Maker module not found: 'license_change.py\n'")
+            "[skelpy] Maker module not found: 'license_change.py'\n")
         return False
 
     maker = maker_cls(**opts)
@@ -199,10 +211,10 @@ def run(argv=None):
 
     func = opts.pop('func')
     if func(opts, parser):
-        sys.stdout.write('Done.\n')
+        sys.stdout.write('Successfully done.\n')
         return 0
     else:
-        sys.stdout.write('Exit.\n')
+        sys.stdout.write('Failed.\n')
         parser.print_usage()
         return 1
 

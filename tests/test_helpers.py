@@ -7,6 +7,7 @@
 from __future__ import absolute_import, print_function
 
 import os
+import sys
 from tempfile import gettempdir
 
 import pytest
@@ -119,3 +120,28 @@ def test_read_setup_cfg():
 
     # after removing dest_file
     assert helpers.read_setup_cfg(dest_file) is None
+
+
+def test_is_rootDir():
+    cwd = os.getcwd()
+
+    assert helpers.is_rootDir('') is False
+    assert helpers.is_rootDir('dks') is False
+
+    if sys.platform == 'win32':
+        assert helpers.is_rootDir('c:\\') is True
+        assert helpers.is_rootDir('c:\\dks') is False
+        os.chdir('C:\\Windows')
+        assert helpers.is_rootDir(os.getcwd()) is False
+        os.chdir('C:\\')
+        assert helpers.is_rootDir(os.getcwd()) is True
+        os.chdir(cwd)
+    else:
+        assert helpers.is_rootDir('/') is True
+        assert helpers.is_rootDir('//') is True
+        assert helpers.is_rootDir('dks') is False
+        os.chdir('/tmp')
+        assert helpers.is_rootDir(os.getcwd()) is False
+        os.chdir('/')
+        assert helpers.is_rootDir(os.getcwd()) is True
+        os.chdir(cwd)
