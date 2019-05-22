@@ -70,12 +70,10 @@ def test_get_gitConfig_without_gitconfig(mocked_join):
 
 
 def test_get_userName():
-    helpers._gitConfig = None
     assert helpers.get_userName() not in ('', None)
 
 
 def test_get_email():
-    helpers._gitConfig = None
     assert helpers.get_email() not in ('', None)
 
 
@@ -87,17 +85,17 @@ def test_remove_comment_line_in_file(test_file):
     destFile = os.path.join(gettempdir(), 'destFile')
 
     helpers.remove_comment_lines_in_file(test_file, destFile)
-    with open(test_file, 'rU') as f:
+    with open(test_file, 'r') as f:
         data = f.read()
     assert data == test_data
 
-    with open(destFile, 'rU') as f:
+    with open(destFile, 'r') as f:
         data = f.read()
     assert data == expected
 
     # overwrite
     helpers.remove_comment_lines_in_file(test_file)
-    with open(test_file, 'rU') as f:
+    with open(test_file, 'r') as f:
         data = f.read()
     assert data == expected
 

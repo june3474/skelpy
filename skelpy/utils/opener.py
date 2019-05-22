@@ -9,6 +9,7 @@ from __future__ import absolute_import, print_function
 
 import os
 import sys
+import subprocess
 
 from .helpers import has_command
 
@@ -27,9 +28,6 @@ def _get_associated_application_cygwin(filePath):
         str: associated application if any, otherwise None
 
     """
-
-    import subprocess
-
     ext = os.path.splitext(filePath)[1]
     if not ext:
         return None
@@ -69,9 +67,6 @@ def _get_associated_application_linux(filePath):
         str: associated application if any, otherwise None
 
     """
-
-    import subprocess
-
     try:
         from subprocess import DEVNULL
     except ImportError:
@@ -240,7 +235,7 @@ def _get_associated_application_linux(filePath):
     return application
 
 
-def open_with_associated_application(filePath, block=False, *args):
+def open_with_associated_application(filePath, *args, block=False):
     """Open the file with the associated application using the *"general-purpose opener"* program.
 
     A "*general-purpose opener*" is a small command-line program which runs the
@@ -278,18 +273,16 @@ def open_with_associated_application(filePath, block=False, *args):
 
     Args:
         filePath (str): the file name(possibly including path) to open
-        block (bool): if True, execute the application in the blocking mode,
-            i.e., wait until the application terminates, otherwise non-blocking
         args (str): other arguments to pass to the application to be invoked
+        block (bool): if True, execute the application in the blocking mode,
+            i.e., wait until the application terminates, otherwise non-blocking.
+            This argument is a keyword-only argument.
 
     Returns:
         int: retcode of :func:`subprocess.call` if the application successfully runs,
         otherwise, i.e., when failed to find an associated application, returns -1
 
     """
-
-    import subprocess
-
     cmd = []
 
     platform = sys.platform

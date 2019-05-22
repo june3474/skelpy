@@ -7,6 +7,7 @@
 from __future__ import absolute_import, print_function
 
 import os
+import sys
 from tempfile import gettempdir
 
 from skelpy.utils import opener, helpers
@@ -95,8 +96,11 @@ class ProjectMaker(BaseMaker):
 
         parser = ConfigParser()
         try:
-            with open(infoFile, 'rU') as f:
-                parser.readfp(f)
+            with open(infoFile, 'r') as f:
+                if sys.version_info[0] == 2:
+                    parser.readfp(f)
+                else:
+                    parser.read_file(f)
         except Exception:
             return False
 

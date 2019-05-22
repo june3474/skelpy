@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import os
 
 from distutils import dir_util
@@ -53,13 +54,14 @@ setup(
     name='skelpy',
     version='1.0.pre',
     python_requires='>=2.7',
-    url='https://github.com/dks/skelpy',
+    url='https://github.com/june3474/skelpy',
     author='dks',
     author_email='june3474@gmail.com',
     description='A simple template tool to create the skeleton for a python project',
     license='NEW-BSD',
     package_dir={'': '.'},
     packages=find_packages(where='.', exclude=['docs', 'tests', 'tests.*']),
+    # include_package_data with MENIFEST.in does not work. why?
     package_data={
         'skelpy.templates': ['*.tpl', '.gitignore.tpl', '.editorconfig.tpl'],
     },

@@ -82,7 +82,8 @@ def get_gitConfig():
     """read ``.gitconfig`` file in the user's ``$HOME`` directory, if exists
 
     Returns:
-        :class:`ConfigParser`: ConfigParser object filled with info read from ``.gitconfig``
+        :class:`ConfigParser`or None: ConfigParser object filled with info
+        read from ``.gitconfig``
 
     """
     import errno
@@ -91,11 +92,12 @@ def get_gitConfig():
     except ImportError:
         from ConfigParser import ConfigParser
 
-    git_config_file = os.path.join(os.environ['HOME'], '.gitconfig')
+    home = 'HOMEPATH' if sys.platform == 'win32' else 'HOME'
+    git_config_file = os.path.join(os.environ[home], '.gitconfig')
     try:
-        with open(git_config_file, 'rU') as f:
+        with open(git_config_file, 'r') as f:
             data = f.readlines()
-    except (IOError, OSError) as e:
+    except (IOError, OSError) as e:   # no .gitconfig
         if e.errno == errno.ENOENT:
             return None
 
@@ -108,7 +110,10 @@ def get_gitConfig():
     stripped_data = ''.join([line.lstrip() for line in data])
     fp = StringIO(stripped_data)
     gitConfig = ConfigParser()
-    gitConfig.readfp(fp)
+    if sys.version_info[0] == 2:
+        gitConfig.readfp(fp)
+    else:
+        gitConfig.read_file(fp)
 
     return gitConfig
 
@@ -136,9 +141,10 @@ def get_userName():
         except (KeyError, NoOptionError):
             pass
 
-    # if not successful, try environment variables
+    # if fail, try environment variables
     if not name:
-        name = os.environ.get('USER', '')
+        user = 'USERNAME' if sys.platform == 'win32' else 'USER'
+        name = os.environ.get(user, '')
 
     return name
 
@@ -249,7 +255,7 @@ def remove_comment_lines_in_file(oldFile, newFile=None):
         None
 
     """
-    with open(oldFile, 'rU') as f:
+    with open(oldFile, 'r') as f:
         data = f.read()
 
     comment_free_data = remove_comment_lines_in_str(data)
@@ -290,14 +296,17 @@ def read_setup_cfg(cfg_file):
         from ConfigParser import ConfigParser  # python2
 
     try:
-        with open(cfg_file, 'rU') as f:
+        with open(cfg_file, 'r') as f:
             data = f.read()
             content = StringIO(remove_comment_lines_in_str(data))
     except IOError:
         return None
 
     parser = ConfigParser()
-    parser.readfp(content)
+    if sys.version_info[0] == 2:
+        parser.readfp(content)
+    else:
+        parser.read_file(content)
 
     conf_dict = {}
     # prevent pollution by too many options

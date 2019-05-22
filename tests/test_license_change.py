@@ -61,7 +61,7 @@ def test_replace_license(changer, setup_cfg, setup):
     assert conf_dict.get('license') == 'NEW-BSD'
     # test setup.py
     changer._replace_license(setup)
-    with open(setup, 'rU') as f:
+    with open(setup, 'r') as f:
         content = f.read()
     assert "license='NEW-BSD'" in content
 

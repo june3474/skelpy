@@ -169,7 +169,7 @@ if __name__ == '__main__':
     # setup.py does not exist
     maker.generate()
     setupFile = os.path.join(maker.projectDir, 'setup.py')
-    with open(setupFile, 'rU') as f:
+    with open(setupFile, 'r') as f:
         content = f.read()
         assert content == expect
 

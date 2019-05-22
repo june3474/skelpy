@@ -14,20 +14,6 @@ from skelpy.utils import opener
 from . import mock
 
 
-@pytest.fixture(scope='module')
-def sample_file():
-    import shutil
-
-    test_data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                 'test_data')
-    src_file = os.path.join(test_data_dir, 'sample_setup.cfg')
-    dest_file = os.path.join(gettempdir(), 'setup.cfg.txt')
-    shutil.copyfile(src_file, dest_file)
-    yield dest_file
-    # teardown
-    os.remove(dest_file)
-
-
 def test_get_associate_application_cygwin():
     if not sys.platform == 'cygwin':
         return
@@ -68,14 +54,31 @@ def test_open_with_associated_app_linux_without_xdg(mocked_command):
         assert mocked_exists.mock_any_call('/usr/share/applications/mimeinfo.cache')
 
 
-def test_open_with_associated_application(sample_file):
-    opener.open_with_associated_application(sample_file, block=True)
-
-    '''
-    # non-blocking
-    with pytest.raises(Exception) as e:
-        utils.open_with_associated_application(testFile)
-        os.remove(testFile)
-    # linux: CalledProcessError, Windows: WindowsError errno == 2,
-    assert e.typename == 'CalledProcessError' or e.typename == 'WindowsError'
-    '''
+@mock.patch.object(opener.subprocess, 'call')
+def test_open_with_associated_application(mocked_call):
+    if sys.platform == 'win32':
+        opener.open_with_associated_application('dummy.txt', block=True)
+        mocked_call.assert_called_with(['start', '/WAIT', 'dummy.txt'], shell=True)
+        # non-blocking
+        opener.open_with_associated_application('dummy.txt', 'arg1', 'arg2', block=False)
+        mocked_call.assert_called_with(['start', 'arg1', 'arg2', 'dummy.txt'], shell=True)
+    elif sys.platform == 'darwin':
+        opener.open_with_associated_application('dummy.txt', block=True)
+        mocked_call.assert_called_with(['open', '-W', 'dummy.txt'])
+        # non-blocking
+        opener.open_with_associated_application('dummy.txt', 'arg1', 'arg2', block=False)
+        mocked_call.assert_called_with(['open', 'arg1', 'arg2', 'dummy.txt'])
+    elif sys.platform == 'cygwin':
+        opener.open_with_associated_application('c:\\windows\\win.ini', block=True)
+        app = opener._get_associated_application_cygwin('c:\\windows\\win.ini')
+        mocked_call.assert_called_with([app, 'c:\\windows\\win.ini'])
+        # non-blocking
+        opener.open_with_associated_application('c:\\windows\\win.ini', 'arg1', 'arg2', block=False)
+        mocked_call.assert_called_with(['cygstart', 'arg1', 'arg2', 'c:\\windows\\win.ini'])
+    elif sys.platform.startswith('linux'):
+        opener.open_with_associated_application('/etc/shells', block=True)
+        app = opener._get_associated_application_linux('/etc/shells')
+        mocked_call.assert_called_with([app, '/etc/shells', '&'])
+        # non-blocking
+        opener.open_with_associated_application('/etc/shells', 'arg1', 'arg2', block=False)
+        mocked_call.assert_called_with([app, '/etc/shells', 'arg1', 'arg2'])

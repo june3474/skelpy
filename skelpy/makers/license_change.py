@@ -54,7 +54,7 @@ class LicenseChanger(LicenseMaker):
         lic_expr = re.compile(r'''(license\s*=\s*)(['"]?)[${}\-\w]+(['"]?)''')
 
         try:
-            with open(file, 'rU') as f:
+            with open(file, 'r') as f:
                 content = f.read()
         except Exception:
             return False
