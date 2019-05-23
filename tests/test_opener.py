@@ -6,9 +6,6 @@ from __future__ import absolute_import, print_function
 
 import sys
 import os
-import pytest
-
-from tempfile import gettempdir
 
 from skelpy.utils import opener
 from . import mock
@@ -54,31 +51,41 @@ def test_open_with_associated_app_linux_without_xdg(mocked_command):
         assert mocked_exists.mock_any_call('/usr/share/applications/mimeinfo.cache')
 
 
-@mock.patch.object(opener.subprocess, 'call')
-def test_open_with_associated_application(mocked_call):
-    if sys.platform == 'win32':
-        opener.open_with_associated_application('dummy.txt', block=True)
-        mocked_call.assert_called_with(['start', '/WAIT', 'dummy.txt'], shell=True)
-        # non-blocking
-        opener.open_with_associated_application('dummy.txt', 'arg1', 'arg2', block=False)
-        mocked_call.assert_called_with(['start', 'arg1', 'arg2', 'dummy.txt'], shell=True)
-    elif sys.platform == 'darwin':
-        opener.open_with_associated_application('dummy.txt', block=True)
-        mocked_call.assert_called_with(['open', '-W', 'dummy.txt'])
-        # non-blocking
-        opener.open_with_associated_application('dummy.txt', 'arg1', 'arg2', block=False)
-        mocked_call.assert_called_with(['open', 'arg1', 'arg2', 'dummy.txt'])
-    elif sys.platform == 'cygwin':
-        opener.open_with_associated_application('c:\\windows\\win.ini', block=True)
-        app = opener._get_associated_application_cygwin('c:\\windows\\win.ini')
-        mocked_call.assert_called_with([app, 'c:\\windows\\win.ini'])
-        # non-blocking
-        opener.open_with_associated_application('c:\\windows\\win.ini', 'arg1', 'arg2', block=False)
-        mocked_call.assert_called_with(['cygstart', 'arg1', 'arg2', 'c:\\windows\\win.ini'])
+def test_open_with_associated_application():
+    test_data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 'test_data')
+    testFile = os.path.join(test_data_dir, 'data.txt')
+
+    app = None
+    if sys.platform == 'cygwin':
+        app = opener._get_associated_application_cygwin(testFile)
+        opener._get_associated_application_cygwin = mock.Mock(return_value=app)
     elif sys.platform.startswith('linux'):
-        opener.open_with_associated_application('/etc/shells', block=True)
-        app = opener._get_associated_application_linux('/etc/shells')
-        mocked_call.assert_called_with([app, '/etc/shells', '&'])
-        # non-blocking
-        opener.open_with_associated_application('/etc/shells', 'arg1', 'arg2', block=False)
-        mocked_call.assert_called_with([app, '/etc/shells', 'arg1', 'arg2'])
+        app = opener._get_associated_application_linux(testFile)
+        opener._get_associated_application_linux = mock.Mock(return_value=app)
+
+    with mock.patch.object(opener.subprocess, 'call') as mocked_call:
+        if sys.platform == 'win32':
+            opener.open_with_associated_application(testFile, block=True)
+            mocked_call.assert_called_with(['start', '/WAIT', testFile], shell=True)
+            # non-blocking
+            opener.open_with_associated_application(testFile, False, 'arg1', 'arg2')
+            mocked_call.assert_called_with(['start', 'arg1', 'arg2', testFile], shell=True)
+        elif sys.platform == 'darwin':
+            opener.open_with_associated_application(testFile, block=True)
+            mocked_call.assert_called_with(['open', '-W', testFile])
+            # non-blocking
+            opener.open_with_associated_application(testFile, False, 'arg1', 'arg2')
+            mocked_call.assert_called_with(['open', 'arg1', 'arg2', testFile])
+        elif sys.platform == 'cygwin':
+            opener.open_with_associated_application(testFile, block=True)
+            mocked_call.assert_called_with([app, testFile])
+            # non-blocking
+            opener.open_with_associated_application(testFile, False, 'arg1', 'arg2')
+            mocked_call.assert_called_with(['cygstart', 'arg1', 'arg2', testFile])
+        elif sys.platform.startswith('linux'):
+            opener.open_with_associated_application(testFile, block=True)
+            mocked_call.assert_called_with([app, testFile])
+            # non-blocking
+            opener.open_with_associated_application(testFile, False, 'arg1', 'arg2')
+            mocked_call.assert_called_with([app, 'arg1', 'arg2', testFile, '&'])
