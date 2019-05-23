@@ -137,7 +137,10 @@ def _get_associated_application_linux(filePath):
 
         if mimeFile:
             parser = ConfigParser()
-            parser.readfile(open(mimeFile))
+            if sys.version_info[0] == 2:
+                parser.readfp(open(mimeFile))
+            else:
+                parser.read_file(open(mimeFile))
 
             try:  # python 2.7 doesn't support 'fallback' option
                 desktop = parser.get('Default Applications', mime)
@@ -155,9 +158,7 @@ def _get_associated_application_linux(filePath):
 
         # if mimeapps.list fails, try mimeinfo.cache
         searchFile = 'mimeinfo.cache'
-        locations = [
-            '/usr/share/applications/',
-            ]
+        locations = ['/usr/share/applications/']
 
         mimeFile = None
         for l in locations:
@@ -168,7 +169,11 @@ def _get_associated_application_linux(filePath):
         if mimeFile:
             # reset ConfigParser
             parser = ConfigParser()
-            parser.readfp(open(mimeFile))
+            if sys.version_info[0] == 2:
+                parser.readfp(open(mimeFile))
+            else:
+                parser.read_file(open(mimeFile))
+
             try:  # desktop should still be None
                 desktop = parser.get('MIME Cache', mime)
                 if desktop:
@@ -204,7 +209,10 @@ def _get_associated_application_linux(filePath):
             return None
 
         parser = ConfigParser()
-        parser.readfp(open(dfile))
+        if sys.version_info[0] == 2:
+            parser.readfp(open(dfile))
+        else:
+            parser.read_file(open(dfile))
 
         command = None
         try:  # python 2.7 doesn't support fallback option
@@ -215,7 +223,7 @@ def _get_associated_application_linux(filePath):
         if command:
             command = command.split()[0]
             # final check
-            if bool(subprocess.call(['which', command], stdout=DEVNULL, stderr=DEVNULL)):
+            if not has_command(command):
                 command = None
 
         return command
@@ -235,7 +243,8 @@ def _get_associated_application_linux(filePath):
     return application
 
 
-def open_with_associated_application(filePath, *args, block=False):
+#: For compatibility with python 2.7, we do not use keyword-only arguments here.
+def open_with_associated_application(filePath, block=False, *args):
     """Open the file with the associated application using the *"general-purpose opener"* program.
 
     A "*general-purpose opener*" is a small command-line program which runs the
@@ -319,7 +328,8 @@ def open_with_associated_application(filePath, *args, block=False):
         cmd.extend(args)
         cmd.append(filePath)
         if not block:
-            cmd.append('&')  # instead of checking xdg-mime installed, simply running background
+            # instead of checking xdg-mime installed, simply running background
+            cmd.append('&')
         try:
             return subprocess.call(cmd)
         except TypeError:  # in case that application is None
