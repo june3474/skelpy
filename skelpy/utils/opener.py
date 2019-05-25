@@ -36,7 +36,8 @@ def _get_associated_application_cygwin(filePath):
         ftype = subprocess.check_output(['cmd', '/C', 'assoc', ext])
     except subprocess.CalledProcessError:
         return None
-    _, ftype = ftype.split('=', 1)
+
+    _, ftype = ftype.decode(encoding='utf-8').split('=', 1)
     ftype = ftype.strip()
 
     import shlex
@@ -44,13 +45,13 @@ def _get_associated_application_cygwin(filePath):
         association = subprocess.check_output(['cmd', '/C', 'ftype', ftype])
     except subprocess.CalledProcessError:
         return None
-    _, application = association.split('=', 1)
+    
+    _, application = association.decode(encoding='utf-8').split('=', 1)
     application = shlex.split(application, posix=False)[0]
     # still need a final touch for environment variables like %SystemRoot%
     # os.path.expandvars() does not work for % style variables on cygwin
     application = subprocess.check_output(['cmd', '/C', 'echo', application])
-
-    return '"' + application.strip() + '"'  # in case for spaces in 'application'
+    return application.decode(encoding='utf-8').strip()
 
 
 def _get_associated_application_linux(filePath):

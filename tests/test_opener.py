@@ -15,8 +15,8 @@ def test_get_associate_application_cygwin():
     if not sys.platform == 'cygwin':
         return
 
-    app = opener._get_associated_application_cygwin('c:\\windows\\win.ini')
-    assert app == '"C:\\Windows\\system32\\NOTEPAD.EXE"'
+    app = opener._get_associated_application_cygwin('/cygdrive/c/Windows/win.ini')
+    assert app == 'C:\\Windows\\system32\\NOTEPAD.EXE'
 
     app = opener._get_associated_application_cygwin('.dks')
     assert app is None
