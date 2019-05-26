@@ -58,7 +58,7 @@ setup(
     author='dks',
     author_email='june3474@gmail.com',
     description='A simple template tool to create the skeleton for a python project',
-    license='NEW-BSD',
+    license='MIT',
     package_dir={'': '.'},
     packages=find_packages(where='.', exclude=['docs', 'tests', 'tests.*']),
     # include_package_data with MENIFEST.in does not work. why?

@@ -28,6 +28,24 @@ def _get_associated_application_cygwin(filePath):
         str: associated application if any, otherwise None
 
     """
+    def _convert_win_path_to_posix(path):
+        """Convert Windows-style path to posix-style
+
+        Args:
+            path (str): Windows-style path to convert
+
+        Returns:
+           str: posix-style path
+        """
+        components = path.split('\\')
+        if components[0].endswith(':'):
+            components[0] = components[0].lower()[:-1]
+            newPath = os.path.join('/cygdrive', *components)
+        else:
+            newPath = os.path.join(*components)
+
+        return newPath
+
     ext = os.path.splitext(filePath)[1]
     if not ext:
         return None
@@ -51,7 +69,9 @@ def _get_associated_application_cygwin(filePath):
     # still need a final touch for environment variables like %SystemRoot%
     # os.path.expandvars() does not work for % style variables on cygwin
     application = subprocess.check_output(['cmd', '/C', 'echo', application])
-    return application.decode(encoding='utf-8').strip()
+    application = application.decode(encoding='utf-8').strip()
+
+    return _convert_win_path_to_posix(application)
 
 
 def _get_associated_application_linux(filePath):
@@ -68,11 +88,6 @@ def _get_associated_application_linux(filePath):
         str: associated application if any, otherwise None
 
     """
-    try:
-        from subprocess import DEVNULL
-    except ImportError:
-        DEVNULL = open(os.devnull, 'wb')
-
     # make a ConfigParser instance ready in place
     try:
         from configparser import ConfigParser, NoOptionError  # python 3.x
