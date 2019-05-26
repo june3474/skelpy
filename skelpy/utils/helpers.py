@@ -269,7 +269,9 @@ def remove_comment_lines_in_file(oldFile, newFile=None):
 
 
 def read_setup_cfg(cfg_file):
-    """read ``setup.cfg`` file in the given directory
+    """read ``setup.cfg`` file
+
+    ``cfg_file`` can contain a path
 
     Note:
 

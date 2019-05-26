@@ -14,12 +14,12 @@ from skelpy.makers import license_change, settings
 from skelpy.utils.helpers import read_setup_cfg
 from . import mock
 
+skelpy_projDir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
 
 @pytest.fixture(scope='module')
 def setup_cfg():
-    test_data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                 'test_data')
-    src_file = os.path.join(test_data_dir, 'sample_setup.cfg')
+    src_file = os.path.join(skelpy_projDir, 'setup.cfg')
     dest_file = os.path.join(gettempdir(), 'setup.cfg')
     shutil.copyfile(src_file, dest_file)
     yield dest_file
@@ -29,10 +29,7 @@ def setup_cfg():
 
 @pytest.fixture(scope='module')
 def setup():
-    templates_dir = os.path.abspath(
-        os.path.join(os.path.dirname(__file__),
-                     '..', 'skelpy', 'templates'))
-    src_file = os.path.join(templates_dir, 'setup.tpl')
+    src_file = os.path.join(skelpy_projDir, 'setup.py')
     dest_file = os.path.join(gettempdir(), 'setup.py')
     shutil.copyfile(src_file, dest_file)
     yield dest_file
@@ -41,27 +38,30 @@ def setup():
 
 
 @pytest.fixture(scope='module')
-def changer():
+def changer(setup, setup_cfg):
+    os.chdir(gettempdir())
+
     settings.clear()
-    return license_change.Maker(list=False, license='NEW-BSD')
+    return license_change.Maker(list_option=False, license='NEW-BSD')
 
 
 def test_update_settings(changer):
+    # 'today' is set in the parent class, i.e., LicenseMaker
     assert settings.get('today') == datetime.date.today().isoformat()
     assert settings.get('projectName') == os.path.split(os.getcwd())[-1]
 
 
-def test_replace_license(changer, setup_cfg, setup):
+def test_replace_license(changer):
     # test setup.cfg
-    conf_dict = read_setup_cfg(setup_cfg)
-    assert conf_dict.get('license') == '${license}'
+    conf_dict = read_setup_cfg('setup.cfg')
+    assert conf_dict.get('license') == 'MIT'
     changer.license = 'NEW-BSD'
-    changer._replace_license(setup_cfg)
-    conf_dict = read_setup_cfg(setup_cfg)
+    changer._replace_license('setup.cfg')
+    conf_dict = read_setup_cfg('setup.cfg')
     assert conf_dict.get('license') == 'NEW-BSD'
     # test setup.py
-    changer._replace_license(setup)
-    with open(setup, 'r') as f:
+    changer._replace_license('setup.py')
+    with open('setup.py', 'r') as f:
         content = f.read()
     assert "license='NEW-BSD'" in content
 
@@ -86,6 +86,7 @@ def test_generate(changer):
     if os.path.exists(licFile):
         os.remove(licFile)
 
+    # don't mess with setup.py & setup.cfg tested above already
     with mock.patch('os.path.exists', return_value=False):
         changer.generate()
 

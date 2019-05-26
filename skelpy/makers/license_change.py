@@ -14,15 +14,25 @@ from .license import LicenseMaker
 class LicenseChanger(LicenseMaker):
     """*Maker* class to change the existing ``LICENSE`` file
 
+    As of now, LicenseMaker changes three files in the **current** **directory**,
+    i.e., in the directory where skelpy is executed or ``os.getcwd()``:
+
+        * ``LICENSE``
+        * ``setup.cfg``
+        * ``setup.py``
+
+    Todo:
+        * enable to change the license in other directory(project)
+
     Args:
         list (bool): if True, print the list of supported licenses without changing
             (default: False)
         license (str): license to change to
 
     """
-    def __init__(self, list, license):
-        self.list_option = list
-        self.license = license.upper() if license else license
+    def __init__(self, list_option, license=LicenseMaker.default_license):
+        self.list_option = list_option
+        self.license = license.upper()
         self.projectDir = os.getcwd()
         self.force = True
         self.quiet = True
