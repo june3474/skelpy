@@ -14,7 +14,7 @@ from skelpy.makers import license_change, settings
 from skelpy.utils.helpers import read_setup_cfg
 from . import mock
 
-skelpy_projDir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+skelpy_projDir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..' ))
 
 
 @pytest.fixture(scope='module')

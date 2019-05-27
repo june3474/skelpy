@@ -6,9 +6,23 @@ from __future__ import absolute_import, print_function
 
 import sys
 import os
+import pytest
+from tempfile import gettempdir
 
 from skelpy.utils import opener
 from . import mock
+
+
+@pytest.fixture(scope='module')
+def testFile():
+    dest_file = os.path.join(gettempdir(), 'test.txt')
+    with open(dest_file, 'wt') as f:
+        f.write('dummy text')
+        f.flush()
+        os.fsync(f.fileno())
+    yield dest_file
+    # teardown
+    os.remove(dest_file)
 
 
 def test_get_associate_application_cygwin():
@@ -37,25 +51,21 @@ def test_open_with_associated_app_linux_without_xdg(mocked_command):
     if not sys.platform.startswith('linux'):
         return
 
-    # test _find_mime() with a sham filename
+    # test _find_mime()
     with mock.patch('os.path.splitext') as mocked_splitext:
-        opener._get_associated_application_linux('kladsjfkls')
+        opener._get_associated_application_linux('anyfile')
         mocked_command.assert_called_with('xdg-mime')
-        mocked_splitext.assert_any_call('kladsjfkls')
+        mocked_splitext.assert_any_call('anyfile')
 
     # test _find_desktop
     with mock.patch('os.path.exists', return_value=False) as mocked_exists:
         with mock.patch('subprocess.check_output') as mocked_subprocess:
-            opener._get_associated_application_linux('sample.txt')
+            opener._get_associated_application_linux('dummy.txt')
             mocked_subprocess.assert_not_called()
         assert mocked_exists.mock_any_call('/usr/share/applications/mimeinfo.cache')
 
 
-def test_open_with_associated_application():
-    test_data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                 'test_data')
-    testFile = os.path.join(test_data_dir, 'data.txt')
-
+def test_open_with_associated_application(testFile):
     app = None
     if sys.platform == 'cygwin':
         app = opener._get_associated_application_cygwin(testFile)

@@ -103,21 +103,14 @@ def test_remove_comment_line_in_file(test_file):
 
 
 def test_read_setup_cfg():
-    import shutil
+    # try to read an not-existing file
+    assert helpers.read_setup_cfg('invalid.cfg') == {}
 
-    test_data_dir = os.path.join(os.path.dirname(__file__), 'test_data')
-    src_file = os.path.join(test_data_dir, 'sample_setup.cfg')
-    dest_file = os.path.join(gettempdir(), 'setup.cfg')
-    shutil.copyfile(src_file, dest_file)
-
-    conf_dict = helpers.read_setup_cfg(dest_file)
-    os.remove(dest_file)
+    cfgFile = os.path.join(os.path.dirname(__file__), '..', 'setup.cfg')
+    conf_dict = helpers.read_setup_cfg(cfgFile)
 
     assert conf_dict.get('name') == 'skelpy'
-    assert conf_dict.get('license') == '${license}'
-
-    # after removing dest_file
-    assert helpers.read_setup_cfg(dest_file) is None
+    assert conf_dict.get('license') == 'MIT'
 
 
 def test_is_rootDir():

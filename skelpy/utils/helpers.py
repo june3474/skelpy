@@ -281,12 +281,14 @@ def read_setup_cfg(cfg_file):
         cfg_file (str): path of ``setup.cfg`` file
 
     Returns:
-        dict: information read from the setup.cfg file  if successful, otherwise an empty dict
+        dict: information read from the setup.cfg file  if successful, otherwise an empty dict.
 
     .. _problem with encoding under python2:
         https://github.com/pypa/setuptools/issues/1136
 
     """
+    conf_dict = {}
+
     try:
         from StringIO import StringIO  # python 2
     except ImportError:
@@ -302,7 +304,7 @@ def read_setup_cfg(cfg_file):
             data = f.read()
             content = StringIO(remove_comment_lines_in_str(data))
     except IOError:
-        return None
+        return conf_dict
 
     parser = ConfigParser()
     if sys.version_info[0] == 2:
@@ -310,7 +312,6 @@ def read_setup_cfg(cfg_file):
     else:
         parser.read_file(content)
 
-    conf_dict = {}
     # prevent pollution by too many options
     sections_to_read = ['metadata', 'options', 'options.packages.find']
     for section in sections_to_read:

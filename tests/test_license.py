@@ -14,21 +14,7 @@ from . import mock
 
 
 @pytest.fixture(scope='module')
-def setup_cfg():
-    import shutil
-
-    test_data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                 'test_data')
-    src_file = os.path.join(test_data_dir, 'sample_setup.cfg')
-    dest_file = os.path.join(gettempdir(), 'setup.cfg')
-    shutil.copyfile(src_file, dest_file)
-    yield dest_file
-    # teardown
-    os.remove(dest_file)
-
-
-@pytest.fixture(scope='module')
-def maker(setup_cfg):
+def maker():
     settings.clear()
     opts = {'projectDir': gettempdir(),
             'force': False,
