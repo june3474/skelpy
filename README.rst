@@ -62,7 +62,7 @@ To start a new project, say 'my_project', just type on the command line ::
 This will create a new folder ``my_project`` under the current directory and
 fill the directory with sub-directories and configuration files like below::
 
-    'basic' format(default)                   'src' format
+    **'basic'** format(default)                   **'src'** format
 
     my_project/                               my_project/
     ├── docs/                                 ├── docs/
