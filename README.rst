@@ -93,7 +93,7 @@ For more options, See ``skelpy -h``
 
 License
 =======
-*skelpy* is under `MIT`_ license.
+*skelpy* is under the `MIT`_ license.
 
 Author
 ======
