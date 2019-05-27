@@ -6,7 +6,7 @@
 #
 # You can change the info later by editing setup.cfg and setup.py
 # manually. If you prefer to skip this process(thereby, applying
-# defaults) and to edit the two files later, use -q/--quiet option
+# defaults), use -q/--quiet option
 #--------------------------------------------------------------------
 
 [Project]
