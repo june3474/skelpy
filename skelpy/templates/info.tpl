@@ -1,8 +1,8 @@
 #--------------------------------------------------------------------
 # A LITTLE MORE INFORMATION ABOUT THE PROJECT.
 #
-# This minimum information is essential to create your project,
-# and will be used to generate setup.cfg and setup.py properly.
+# This minimum information is needed to generate setup.cfg and
+# setup.py properly.
 #
 # You can change the info later by editing setup.cfg and setup.py
 # manually. If you prefer to skip this process(thereby, applying
