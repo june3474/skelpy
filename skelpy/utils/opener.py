@@ -14,51 +14,6 @@ import subprocess
 from .helpers import has_command
 
 
-def _get_associated_application_cygwin(filePath):
-    """Helper function to find the appropriate application associated with the given file on cygwin platform
-
-    Args:
-        filePath (str):  the file name (possibly including path) to open
-
-        .. Warning::
-
-            filePath should NOT end with '\' or '/'
-
-    Returns:
-        str: associated application if any, otherwise None
-
-    """
-    ext = os.path.splitext(filePath)[1]
-    if not ext:
-        return None
-
-    try:
-        ftype = subprocess.check_output(['cmd', '/C', 'assoc', ext])
-    except subprocess.CalledProcessError:
-        return None
-
-    _, ftype = ftype.decode(encoding='utf-8').split('=', 1)
-    ftype = ftype.strip()
-
-    import shlex
-    try:
-        association = subprocess.check_output(['cmd', '/C', 'ftype', ftype])
-    except subprocess.CalledProcessError:
-        return None
-
-    _, application = association.decode(encoding='utf-8').split('=', 1)
-    if not application:
-        return None
-
-    application = shlex.split(application, posix=False)[0]
-    # still need a final touch for environment variables like %SystemRoot%
-    # os.path.expandvars() does not work for % style variables on cygwin
-    application = subprocess.check_output(['cmd', '/C', 'echo', application])
-    application = application.decode(encoding='utf-8').strip()
-
-    return subprocess.check_output(['cygpath', '--unix', '--proc-cygdrive', application])
-
-
 def _get_associated_application_linux(filePath):
     """Helper function to find the appropriate application associated with the given file on linux platform
 
@@ -244,13 +199,119 @@ def _get_associated_application_linux(filePath):
     return application
 
 
-#: For compatibility with python 2.7, we do not use keyword-only arguments here.
+def _byte2str(binary_str):
+    """Convert byte string to str
+
+    The purpose of this small function is to convert and to tidy up the
+    return value of :func:`subprocess.check_output()`
+
+    Args:
+        binary_str: byte string
+
+    Returns:
+        str: utf-8 string
+
+    """
+    return binary_str.decode(encoding='utf-8').strip()
+
+
+def _cyg_win2unix(path):
+    """convert Windows-style path to Unix-style on **cygwin**
+
+    Args:
+        path: file path to convert
+
+    Returns:
+        str: unix-style path
+
+    """
+    unix_path = subprocess.check_output(['cygpath', '--unix',
+                                         '--proc-cygdrive', path])
+    return _byte2str(unix_path)
+
+
+def _cyg_unix2win(path):
+    """convert Unix-style path to Windows-style on **cygwin**
+
+    Args:
+        path: file path to convert
+
+    Returns:
+        str: Windows-style path
+
+    """
+    win_path = subprocess.check_output(['cygpath', '--windows',
+                                        '--long-name', path])
+    return _byte2str(win_path)
+
+
+def _get_associated_application_cygwin(filePath):
+    """Find the appropriate application associated with the given file on cygwin
+
+    This function tries to fine cygwin-native application first. If fail,
+    It searches Windows applications.
+
+    Args:
+        filePath (str):  the file name(including path) to open
+
+        .. Warning::
+
+            filePath should NOT end with '\' or '/'
+
+    Returns:
+        str: associated application if any, otherwise None
+
+        .. Notes::
+
+            If the application found is a cygwin-native, it has a *nix-style
+            path(os.sep == '/'). If the found is a Windows application its path is
+            in windows-style(os.sep == '\\' and optional drive letter).
+
+    """
+    # check cygwin-native applications first
+    app = _get_associated_application_linux(filePath)
+    if app:
+        return app
+
+    # if no native application is available, check Windows applications
+    ext = os.path.splitext(filePath)[1]
+    if not ext:
+        return None
+
+    try:
+        ftype = subprocess.check_output(['cmd', '/C', 'assoc', ext])
+    except subprocess.CalledProcessError:
+        return None
+
+    _, ftype = ftype.decode(encoding='utf-8').split('=', 1)
+    ftype = ftype.strip()
+
+    import shlex
+    try:
+        association = subprocess.check_output(['cmd', '/C', 'ftype', ftype])
+    except subprocess.CalledProcessError:
+        return None
+
+    _, app = association.decode(encoding='utf-8').split('=', 1)
+    if not app:
+        return None
+
+    app = shlex.split(app, posix=False)[0]
+    # still need a final touch for environment variables like %SystemRoot%
+    # os.path.expandvars() does not work for % style variables on cygwin
+    app = subprocess.check_output(['cmd', '/C', 'echo', app])
+
+    return _byte2str(app)
+
+
+#: For the compatibility with python 2.7, we do not use keyword-only arguments here.
 def open_with_associated_application(filePath, block=False, *args):
     """Open the file with the associated application using the *"general-purpose opener"* program.
 
-    A "*general-purpose opener*" is a small command-line program which runs the
-    specified application associated to the file type. In a rough sense,
-    what *general-purpose opener* does is like double-clicking the file.
+    A "*general-purpose opener*" is a small command-line program which runs a
+    certain application associated to the file type. In a rough sense,
+    what *general-purpose opener* does is like double-clicking the file on a
+    file-manage program such as Explorer of Windows.
     Below are well-known OSes and their *general-purpose openers*::
 
         - Linux: xdg-open
@@ -258,15 +319,15 @@ def open_with_associated_application(filePath, block=False, *args):
         - OS X: open
         - Cygwin: cygstart
 
-    .. Note::
+    .. Notes::
 
         Although :func:`subprocess.call` is a blocking function, Most--well,
         if not all--general-purpose openers, by default, do not wait until
         the application terminates. For kind-of blocking mode, Windows(``start``)
-        and OSX(``open``) provide waiting option "/WAIT" and "-W", respectively.
+        and OSX(``open``) provide the option "/WAIT" and "-W", respectively.
         So, it is possible to run the associated application in the blocking mode
-        just by invoking the *general-purpose opener* with a file name with those
-        options. For example, on Windows::
+        just by invoking the *general-purpose opener* with those options.
+        For example, on Windows::
 
             start -W sample.txt
 
@@ -275,11 +336,24 @@ def open_with_associated_application(filePath, block=False, *args):
 
         However, it is **not** possible on linux and cygwin, because their
         *general-purpose openers* do not have such options.
-        Thus, for the same effect on linux and cygwin, we have to directly run
-        the associated application with the file
+        Thus, for the same effect on linux and cygwin, we have to fine
+        the associated application and directly run it.
 
         Also be informed that :func:`startfile` function provided by python
         :mod:`os` module is only for Windows and non-blocking.
+
+    .. Notes::
+
+        On Cygwin, the path of the application to run should follow the *nix-style,
+        which uses '/' as the path separator. However, the path-style of the file
+        to open with the application differs from applications. If the
+        application is a Cygwin-native, the file path style does not matter.
+        That is, a Cygwin-native application can open files in *nix-style
+        path and Windows-style ones as well with no problem. But, Windows
+        applications can not recognize *nix-style path. Therefore, when used with
+        a Windows application on Cygwin, the file path should be in the
+        Windows-style which uses '\\' as the path separator and an optional drive
+        letter.
 
     Args:
         filePath (str): the file name(possibly including path) to open
@@ -314,8 +388,15 @@ def open_with_associated_application(filePath, block=False, *args):
         cmd.append(filePath)
         return subprocess.call(cmd)
     elif platform == 'cygwin':
+        app = _get_associated_application_cygwin(filePath)
+        appType = subprocess.check_output(['cygpath', '--type', app])
+        # Once got the application type, we need *nix-style path for the app
+        if appType == 'dos' or appType == 'windows':
+            app = _cyg_win2unix(app)
+            filePath = _cyg_unix2win(filePath)
+
         if block:
-            cmd.append(_get_associated_application_cygwin(filePath))
+            cmd.append(app)
         else:
             cmd.append('cygstart')
         cmd.extend(args)
@@ -329,7 +410,7 @@ def open_with_associated_application(filePath, block=False, *args):
         cmd.extend(args)
         cmd.append(filePath)
         if not block:
-            # instead of checking xdg-mime installed, simply running background
+            # instead of checking xdg-mime installed, simply run in background
             cmd.append('&')
         try:
             return subprocess.call(cmd)
