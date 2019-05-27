@@ -1,5 +1,6 @@
 #--------------------------------------------------------------------
-# 'skelpy' needs a little more information about the project.
+# A LITTLE MORE INFORMATION ABOUT THE PROJECT.
+#
 # This minimum information is essential to create your project,
 # and will be used to generate setup.cfg and setup.py properly.
 #
@@ -14,8 +15,9 @@ version = 1.0.0
 description = ADD SHORT DESCRIPTION ON THE PROJECT HERE
 url = https://github.com/${author}/${projectName}
 license = MIT
-# Supported Licenses
 #--------------------------------------------------------------------
+# Supported Licenses
+#
 # APACHE: Apache License
 # CC0: Creative Commons License for public domain
 # GPL2: GNU General Public License v2.0
