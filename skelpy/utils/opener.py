@@ -222,9 +222,15 @@ def _tell_path_type(path):
         path(str): path to check
 
     Returns:
-        str: 'windows' if the path is in Windows-style, 'linux' if in *nix-style
+        str: 'windows' if the path is in Windows-style, 'unix' otherwise
 
     """
+    win_path = subprocess.check_output(['cygpath', '--windows', path])
+    if path == _byte2str(win_path):
+        return 'windows'
+    else:
+        return 'unix'
+
 
 def _cyg_win2unix(path):
     """convert Windows-style path to Unix-style on **cygwin**
@@ -400,9 +406,9 @@ def open_with_associated_application(filePath, block=False, *args):
         return subprocess.call(cmd)
     elif platform == 'cygwin':
         app = _get_associated_application_cygwin(filePath)
-        appType = subprocess.check_output(['cygpath', '--type', app])
+        appType = _tell_path_type(app)
         # Once got the application type, we need *nix-style path for the app
-        if appType == 'dos' or appType == 'windows':
+        if appType == 'windows':
             app = _cyg_win2unix(app)
             filePath = _cyg_unix2win(filePath)
 
