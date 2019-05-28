@@ -215,6 +215,17 @@ def _byte2str(binary_str):
     return binary_str.decode(encoding='utf-8').strip()
 
 
+def _tell_path_type(path):
+    """Tell the type(i.e., Windows-style or *nix-style) of the path given
+
+    Args:
+        path(str): path to check
+
+    Returns:
+        str: 'windows' if the path is in Windows-style, 'linux' if in *nix-style
+
+    """
+
 def _cyg_win2unix(path):
     """convert Windows-style path to Unix-style on **cygwin**
 
