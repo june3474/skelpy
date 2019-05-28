@@ -249,23 +249,23 @@ def _get_associated_application_cygwin(filePath):
     """Find the appropriate application associated with the given file on cygwin
 
     This function tries to fine cygwin-native application first. If fail,
-    It searches Windows applications.
+    It then searches Windows applications.
 
     Args:
-        filePath (str):  the file name(including path) to open
+        filePath (str):  the file name(including path) to find the associated application
 
         .. Warning::
 
             filePath should NOT end with '\' or '/'
 
     Returns:
-        str: associated application if any, otherwise None
+        str: associated application path if any, otherwise None
 
         .. Notes::
 
             If the application found is a cygwin-native, it has a *nix-style
             path(os.sep == '/'). If the found is a Windows application its path is
-            in windows-style(os.sep == '\\' and optional drive letter).
+            in the windows-style(os.sep == '\\' and optional drive letter).
 
     """
     # check cygwin-native applications first
@@ -348,10 +348,10 @@ def open_with_associated_application(filePath, block=False, *args):
         which uses '/' as the path separator. However, the path-style of the file
         to open with the application differs from applications. If the
         application is a Cygwin-native, the file path style does not matter.
-        That is, a Cygwin-native application can open files in *nix-style
-        path and Windows-style ones as well with no problem. But, Windows
-        applications can not recognize *nix-style path. Therefore, when used with
-        a Windows application on Cygwin, the file path should be in the
+        That is, a Cygwin-native application can open files in the *nix-style
+        path and in the Windows-style as well. But, Windows
+        applications can not recognize the *nix-style path. Therefore, when used
+        with a Windows application on Cygwin, the file path should be in the
         Windows-style which uses '\\' as the path separator and an optional drive
         letter.
 
@@ -359,8 +359,8 @@ def open_with_associated_application(filePath, block=False, *args):
         filePath (str): the file name(possibly including path) to open
         args (str): other arguments to pass to the application to be invoked
         block (bool): if True, execute the application in the blocking mode,
-            i.e., wait until the application terminates, otherwise non-blocking.
-            This argument is a keyword-only argument.
+            i.e., wait until the application terminates, otherwise in the
+            non-blocking mode.
 
     Returns:
         int: retcode of :func:`subprocess.call` if the application successfully runs,
