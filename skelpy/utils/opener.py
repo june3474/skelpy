@@ -14,6 +14,22 @@ import subprocess
 from .helpers import has_command
 
 
+def _byte2str(binary_str):
+    """Convert byte string to str
+
+    The purpose of this small function is to convert and to tidy up the
+    return value of :func:`subprocess.check_output()`
+
+    Args:
+        binary_str: byte string
+
+    Returns:
+        str: utf-8 string
+
+    """
+    return binary_str.decode(encoding='utf-8').strip()
+
+
 def _get_associated_application_linux(filePath):
     """Helper function to find the appropriate application associated with the given file on linux platform
 
@@ -36,7 +52,7 @@ def _get_associated_application_linux(filePath):
 
     xdg = has_command('xdg-mime')
 
-    # ------------------------------------------------
+    # sub-functions -----------------------------------------------
     def _find_mime(filePath):
         """Find the proper mime for the given file
 
@@ -44,7 +60,7 @@ def _get_associated_application_linux(filePath):
             filePath (str): file name(possibly including path) to find mime of
 
         Returns:
-            str: mime for the given file if any, otherwise None
+            str or None: mime for the given file if any, otherwise None
 
         """
 
@@ -70,6 +86,8 @@ def _get_associated_application_linux(filePath):
             str: desktop file **without** path info
 
         """
+        if not mime:
+            return None
 
         desktop = None
 
@@ -81,14 +99,14 @@ def _get_associated_application_linux(filePath):
         # if xdg-mime is not available, examine mimeapps.list & mimeinfo.cache in turn
         searchFile = 'mimeapps.list'
         locations = [
-            os.path.expanduser('~/.config/'),
-            os.path.expanduser('~/.local/share/applications/'),
+            os.path.expanduser('~/.config'),
+            os.path.expanduser('~/.local/share/applications'),
             ]
 
         mimeFile = None
         for l in locations:
-            if os.path.exists(l + searchFile):
-                mimeFile = l + searchFile
+            if os.path.exists(os.path.join(l, searchFile)):
+                mimeFile = os.path.join(l, searchFile)
                 break
 
         if mimeFile:
@@ -114,12 +132,12 @@ def _get_associated_application_linux(filePath):
 
         # if mimeapps.list fails, try mimeinfo.cache
         searchFile = 'mimeinfo.cache'
-        locations = ['/usr/share/applications/']
+        locations = ['/usr/share/applications']
 
         mimeFile = None
         for l in locations:
-            if os.path.exists(l + searchFile):
-                mimeFile = l + searchFile
+            if os.path.exists(os.path.join(l, searchFile)):
+                mimeFile = os.path.join(l, searchFile)
                 break
 
         if mimeFile:
@@ -147,20 +165,22 @@ def _get_associated_application_linux(filePath):
             desktop (str): desktop file name
 
         Returns:
-            str: command to run
+            str or None: command to run
 
         """
+        if not desktop:
+            return None
 
-        locations = [
-            os.path.expanduser('~/.local/share/applications/'),
-            '/usr/share/applications/',
-            ]
+        locations = [os.path.expanduser('~/.local/share/applications'),
+                     '/usr/share/applications',
+                     ]
 
         dfile = None
         for l in locations:
-            dfile = l + desktop
-            if os.path.exists(dfile):
+            if os.path.exists(os.path.join(l, desktop)):
+                dfile = os.path.join(l, desktop)
                 break
+
         if not dfile:  # no such a desktop file
             return None
 
@@ -184,7 +204,7 @@ def _get_associated_application_linux(filePath):
 
         return command
     # ------------------------------------------------------
-    #
+
     # now, find the application
     mime = _find_mime(filePath)
     if not mime:
@@ -197,69 +217,6 @@ def _get_associated_application_linux(filePath):
     application = _find_command(desktop)
 
     return application
-
-
-def _byte2str(binary_str):
-    """Convert byte string to str
-
-    The purpose of this small function is to convert and to tidy up the
-    return value of :func:`subprocess.check_output()`
-
-    Args:
-        binary_str: byte string
-
-    Returns:
-        str: utf-8 string
-
-    """
-    return binary_str.decode(encoding='utf-8').strip()
-
-
-def _tell_path_type(path):
-    """Tell the type(i.e., Windows-style or *nix-style) of the path given
-
-    Args:
-        path(str): path to check
-
-    Returns:
-        str: 'windows' if the path is in Windows-style, 'unix' otherwise
-
-    """
-    win_path = subprocess.check_output(['cygpath', '--windows', path])
-    if path == _byte2str(win_path):
-        return 'windows'
-    else:
-        return 'unix'
-
-
-def _cyg_win2unix(path):
-    """convert Windows-style path to Unix-style on **cygwin**
-
-    Args:
-        path: file path to convert
-
-    Returns:
-        str: unix-style path
-
-    """
-    unix_path = subprocess.check_output(['cygpath', '--unix',
-                                         '--proc-cygdrive', path])
-    return _byte2str(unix_path)
-
-
-def _cyg_unix2win(path):
-    """convert Unix-style path to Windows-style on **cygwin**
-
-    Args:
-        path: file path to convert
-
-    Returns:
-        str: Windows-style path
-
-    """
-    win_path = subprocess.check_output(['cygpath', '--windows',
-                                        '--long-name', path])
-    return _byte2str(win_path)
 
 
 def _get_associated_application_cygwin(filePath):
@@ -276,7 +233,7 @@ def _get_associated_application_cygwin(filePath):
             filePath should NOT end with '\' or '/'
 
     Returns:
-        str: associated application path if any, otherwise None
+        str or None: associated application path if any, otherwise None
 
         .. Notes::
 
@@ -310,6 +267,7 @@ def _get_associated_application_cygwin(filePath):
         return None
 
     _, app = association.decode(encoding='utf-8').split('=', 1)
+    app = app.strip()
     if not app:
         return None
 
@@ -318,7 +276,7 @@ def _get_associated_application_cygwin(filePath):
     # os.path.expandvars() does not work for % style variables on cygwin
     app = subprocess.check_output(['cmd', '/C', 'echo', app])
 
-    return _byte2str(app)
+    return '"' + _byte2str(app) + '"'
 
 
 #: For the compatibility with python 2.7, we do not use keyword-only arguments here.
@@ -384,6 +342,10 @@ def open_with_associated_application(filePath, block=False, *args):
         otherwise, i.e., when failed to find an associated application, returns -1
 
     """
+    #: remove trailing '\' or '/' if any
+    while filePath.endswith('\\') or filePath.endswith('/'):
+        filePath = filePath[:-1]
+
     cmd = []
 
     platform = sys.platform
@@ -405,9 +367,61 @@ def open_with_associated_application(filePath, block=False, *args):
         cmd.append(filePath)
         return subprocess.call(cmd)
     elif platform == 'cygwin':
+        # sub functions ------------------------------------------------------
+        def _tell_path_type(path):
+            """Tell the type(i.e., Windows-style or *nix-style) of the path given
+
+            Args:
+                path(str): path to check
+
+            Returns:
+                str: 'windows' if the path is in Windows-style, 'unix' otherwise
+
+            """
+            if '\\' not in path and '/' not in path:  # only file name
+                path = subprocess.check_output(['which', path])
+
+            win_path = subprocess.check_output(['cygpath', '--windows', path])
+            if path == _byte2str(win_path):
+                return 'windows'
+            else:
+                return 'unix'
+
+        def _cyg_win2unix(path):
+            """convert Windows-style path to Unix-style on **cygwin**
+
+            Args:
+                path: file path to convert
+
+            Returns:
+                str: unix-style path
+
+            """
+            unix_path = subprocess.check_output(['cygpath', '--unix',
+                                                 '--proc-cygdrive', path])
+            return _byte2str(unix_path)
+
+        def _cyg_unix2win(path):
+            """convert Unix-style path to Windows-style on **cygwin**
+
+            Args:
+                path: file path to convert
+
+            Returns:
+                str: Windows-style path
+
+            """
+            win_path = subprocess.check_output(['cygpath', '--windows',
+                                                '--long-name', path])
+            return _byte2str(win_path)
+        # ------------------------------------------------------
+
         app = _get_associated_application_cygwin(filePath)
+        if not app:
+            return -1
+
         appType = _tell_path_type(app)
-        # Once got the application type, we need *nix-style path for the app
+        # Once got the application type, we need the *nix-style path for the app
         if appType == 'windows':
             app = _cyg_win2unix(app)
             filePath = _cyg_unix2win(filePath)
@@ -418,6 +432,7 @@ def open_with_associated_application(filePath, block=False, *args):
             cmd.append('cygstart')
         cmd.extend(args)
         cmd.append(filePath)
+
         try:
             return subprocess.call(cmd)
         except TypeError:  # in case that application is None
