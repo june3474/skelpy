@@ -89,7 +89,14 @@ def test_open_with_associated_application(testFile):
             mocked_call.assert_called_with(['open', 'arg1', 'arg2', testFile])
         elif sys.platform == 'cygwin':
             opener.open_with_associated_application(testFile, block=True)
-            mocked_call.assert_called_with([app, testFile])
+            # Because we can't predict what application will be executed,
+            # just check the agreement of path type
+            # mocked_call.assert_called_with([app, testFile])
+            args_list = mocked_call.call_args[0][0]
+            if 'cygdrive' in args_list[0]:  # Windows application
+                assert '/' not in args_list[1]
+            else:
+                assert '\\' not in args_list[1]
             # non-blocking
             opener.open_with_associated_application(testFile, False, 'arg1', 'arg2')
             mocked_call.assert_called_with(['cygstart', 'arg1', 'arg2', testFile])

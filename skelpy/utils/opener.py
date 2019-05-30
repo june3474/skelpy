@@ -438,11 +438,12 @@ def open_with_associated_application(filePath, block=False, *args):
             filePath = _cyg_win2unix(filePath)
 
         if block:
-            cmd.append(app)
+            # path may contain blanks
+            cmd.append('"' + app + '"')
         else:
             cmd.append('cygstart')
         cmd.extend(args)
-        cmd.append(filePath)
+        cmd.append('"' + filePath + '"')
         print('cmd: ', cmd)
         try:
             return subprocess.call(cmd)
