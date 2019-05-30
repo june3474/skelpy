@@ -442,7 +442,7 @@ def open_with_associated_application(filePath, block=False, *args):
             cmd.append('cygstart')
         cmd.extend(args)
         cmd.append(filePath)
-        print('cmd: ', cmd)
+
         try:
             return subprocess.call(cmd)
         except TypeError:  # in case that application is None
