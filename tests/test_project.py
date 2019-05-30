@@ -68,7 +68,7 @@ def test_create_miscellaneous(maker):
     mocked_write = mock.Mock()
     maker.write_file = mocked_write
     # check .gitignore
-    gitignore = os.path.join(tempdir, '.gitignore')
+    gitignore = os.path.join(gettempdir(), '.gitignore')
     with mock.patch.object(project.helpers, 'has_command', side_effect=[True, False]):
         maker._create_miscellaneous()
         assert mocked_write.called is True

@@ -378,9 +378,15 @@ def open_with_associated_application(filePath, block=False, *args):
                 str: 'windows' if the path is in Windows-style, 'unix' otherwise
 
             """
-            if '\\' not in path and '/' not in path:  # only file name
-                path = subprocess.check_output(['which', path])
+            # if file name only
+            if '\\' not in path and '/' not in path:
+                path = _byte2str(subprocess.check_output(['which', path]))
+                if path.startswith('/cygdrive'):
+                    return 'windows'
+                else:
+                    return 'unix'
 
+            # else contain path
             win_path = subprocess.check_output(['cygpath', '--windows', path])
             if path == _byte2str(win_path):
                 return 'windows'
@@ -413,7 +419,9 @@ def open_with_associated_application(filePath, block=False, *args):
             """
             win_path = subprocess.check_output(['cygpath', '--windows',
                                                 '--long-name', path])
-            return _byte2str(win_path)
+            # convert '\' to '\\'
+            path_list = _byte2str(win_path).split('\\')
+            return '\\'.join(path_list)
         # ------------------------------------------------------
 
         app = _get_associated_application_cygwin(filePath)
@@ -421,10 +429,13 @@ def open_with_associated_application(filePath, block=False, *args):
             return -1
 
         appType = _tell_path_type(app)
-        # Once got the application type, we need the *nix-style path for the app
+        # we need the *nix-style path for the app regardless of application type.
+        app = _cyg_win2unix(app)
+        # But for the file to open, need to adjust the path type to applications'   
         if appType == 'windows':
-            app = _cyg_win2unix(app)
             filePath = _cyg_unix2win(filePath)
+        else:
+            filePath = _cyg_win2unix(filePath)
 
         if block:
             cmd.append(app)
@@ -432,7 +443,7 @@ def open_with_associated_application(filePath, block=False, *args):
             cmd.append('cygstart')
         cmd.extend(args)
         cmd.append(filePath)
-
+        print('cmd: ', cmd)
         try:
             return subprocess.call(cmd)
         except TypeError:  # in case that application is None

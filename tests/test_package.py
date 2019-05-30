@@ -41,8 +41,8 @@ def maker2():
 
 
 def test_init(maker1, maker2):
-    assert maker1.packageDir == os.path.join(tempdir, maker1.projectName)
-    assert maker2.packageDir == os.path.join(tempdir, 'src', maker2.projectName)
+    assert maker1.packageDir == os.path.join(gettempdir(), maker1.projectName)
+    assert maker2.packageDir == os.path.join(gettempdir(), 'src', maker2.projectName)
 
 
 def test_udpate_settings(maker1):
