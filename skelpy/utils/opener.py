@@ -387,8 +387,8 @@ def open_with_associated_application(filePath, block=False, *args):
                     return 'unix'
 
             # else contain path
-            win_path = subprocess.check_output(['cygpath', '--windows', path])
-            if path == _byte2str(win_path):
+            win_path = _byte2str(subprocess.check_output(['cygpath', '--windows', path]))
+            if path == win_path:
                 return 'windows'
             else:
                 return 'unix'
@@ -428,17 +428,15 @@ def open_with_associated_application(filePath, block=False, *args):
         if not app:
             return -1
 
-        appType = _tell_path_type(app)
-        # we need the *nix-style path for the app regardless of application type.
-        app = _cyg_win2unix(app)
-        # But for the file to open, need to adjust the path type to applications'   
-        if appType == 'windows':
-            filePath = _cyg_unix2win(filePath)
-        else:
-            filePath = _cyg_win2unix(filePath)
-
         if block:
-            # path may contain blanks
+            appType = _tell_path_type(app)
+            # we need the *nix-style path for the app regardless of application type.
+            app = _cyg_win2unix(app)
+            # But for the file to open, need to adjust the path type to applications'
+            if appType == 'windows':
+                filePath = _cyg_unix2win(filePath)
+            else:
+                filePath = _cyg_win2unix(filePath)
             cmd.append(app)
         else:
             cmd.append('cygstart')
