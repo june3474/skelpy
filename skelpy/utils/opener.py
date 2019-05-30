@@ -276,7 +276,7 @@ def _get_associated_application_cygwin(filePath):
     # os.path.expandvars() does not work for % style variables on cygwin
     app = subprocess.check_output(['cmd', '/C', 'echo', app])
 
-    return '"' + _byte2str(app) + '"'
+    return _byte2str(app)
 
 
 #: For the compatibility with python 2.7, we do not use keyword-only arguments here.
