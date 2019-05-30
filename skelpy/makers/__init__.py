@@ -4,11 +4,11 @@
 """Collection of *Maker* modules
 
 A *Maker* is a class that generates a template.
-This package provides an attribute(dict) and a function on the package level:
+This package also provides a package-level attribute(dict) and a function:
 ``settings`` and ``get_maker()``.
 
 Attributes:
-    settings (dict): container for sharing data across *Makers*
+    settings: container(dict) for sharing data across *Makers*
 
 """
 

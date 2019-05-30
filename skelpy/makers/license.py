@@ -44,7 +44,6 @@ class LicenseMaker(BaseMaker):
         default_license (str): default license(class variable)
 
     """
-    #: class variable
     default_license = 'MIT'
 
     def __init__(self, projectDir, force, license, **kwargs):
@@ -66,7 +65,7 @@ class LicenseMaker(BaseMaker):
 
     @staticmethod
     def is_supported_license(license):
-        """check to see if the license given is supported or not
+        """check to see if the license given is supported by *skelpy* or not
 
         license name is case-insensitive.
 

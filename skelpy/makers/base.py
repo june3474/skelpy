@@ -102,7 +102,7 @@ class BaseMaker(object):
             exists and ``--merge`` option is ``False``.
 
         Raises:
-            OSError(python 2.7) or PermissionError(python 3.x): if permission denied
+            OSError(python 2.7) or PermissionError(python 3.x)
 
         """
         cmd = os.makedirs if recursive else os.mkdir
@@ -140,8 +140,8 @@ class BaseMaker(object):
 
         .. note::
 
-            Functions in ``post_jobs`` are run after ``safe_substitute`` and
-            before writing the final target_file.
+            Functions in ``post_jobs`` list are run after ``safe_substitute()``
+            and before writing the final target_file.
 
         Args:
             template (:obj:`string.Template` or str): :obj:`string.Template` object
@@ -150,7 +150,7 @@ class BaseMaker(object):
             post_jobs (:obj:`list` of :obj:`str`): list of functions or callable
                 object that would run after doing :meth:`Template.safe_substitute`.
 
-                .. note::
+                .. warning::
 
                     Each function in the ``post_jobs`` should take a ``str`` as its
                     argument, which is, in effect, the return value of the

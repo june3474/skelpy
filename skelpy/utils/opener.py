@@ -306,12 +306,12 @@ def open_with_associated_application(filePath, block=False, *args):
 
             start -W sample.txt
 
-        would make a text editor such as ``notepad.exe` open the sample.txt file
+        would make a text editor such as ``notepad.exe`` open the sample.txt file
         and wait until notepad terminates.
 
-        However, it is **not** possible on linux and cygwin, because their
+        However, that is **not** possible on linux and cygwin, because their
         *general-purpose openers* do not have such options.
-        Thus, for the same effect on linux and cygwin, we have to fine
+        Thus, for the same effect on linux and cygwin, we have to find
         the associated application and directly run it.
 
         Also be informed that :func:`startfile` function provided by python
@@ -321,14 +321,11 @@ def open_with_associated_application(filePath, block=False, *args):
 
         On Cygwin, the path of the application to run should follow the *nix-style,
         which uses '/' as the path separator. However, the path-style of the file
-        to open with the application differs from applications. If the
-        application is a Cygwin-native, the file path style does not matter.
-        That is, a Cygwin-native application can open files in the *nix-style
-        path and in the Windows-style as well. But, Windows
-        applications can not recognize the *nix-style path. Therefore, when used
-        with a Windows application on Cygwin, the file path should be in the
-        Windows-style which uses '\\' as the path separator and an optional drive
-        letter.
+        to open with the application differs from applications.
+        As a matter of fact, Windows applications can not recognize the *nix-style
+        path. Therefore, when used with a Windows application on Cygwin, the file
+        path should be in the Windows-style which uses '\\\\' as the path
+        separator and an optional drive letter.
 
     Args:
         filePath (str): the file name(possibly including path) to open

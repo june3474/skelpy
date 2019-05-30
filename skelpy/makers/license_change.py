@@ -14,8 +14,8 @@ from .license import LicenseMaker
 class LicenseChanger(LicenseMaker):
     """*Maker* class to change the existing ``LICENSE`` file
 
-    As of now, LicenseMaker changes three files in the **current** **directory**,
-    i.e., in the directory where skelpy is executed or ``os.getcwd()``:
+    As of now, LicenseMaker changes ``LICENSE`` file in the **current**
+    **directory**, i.e., in the directory where skelpy is executed or ``os.getcwd()``:
 
         * ``LICENSE``
         * ``setup.cfg``
@@ -82,7 +82,7 @@ class LicenseChanger(LicenseMaker):
 
         This method changes not only the ``LICENSE`` file under the project
         directory but also the license attribute in the setup.py and the
-        setup.cfg if they exist.
+        setup.cfg accordingly if they exist.
 
         Returns:
             bool: True if successful, otherwise False

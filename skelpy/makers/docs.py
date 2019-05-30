@@ -14,7 +14,7 @@ class DocMaker(BaseMaker):
     """*Maker* class to create directories and configuration files for documentation
 
     ``DocMaker`` creates a directory named "*docs*" under the project's root directory.
-    Below is the structure of the *docs* directory::
+    Below is the structure of the *docs* directory to be created::
 
         project
         └── docs

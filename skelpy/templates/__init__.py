@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Collection of template files
 
-This package provides a package-level function ``get_template()``.
+This package also provides a package-level function ``get_template()``.
 
 """
 
@@ -24,13 +24,12 @@ def get_template(tpl_name):
         class if successful, otherwise None.
 
     Raises:
-        IOError(python2.7): if ``tpl_name.tpl`` is not found
-        FileNotFoundError(python3.x): if ``tpl_name.tpl`` is not found
+        IOError(python2.7): if *tpl_name.tpl* file is not found
+        FileNotFoundError(python3.x): if *tpl_name.tpl* file is not found
         TypeError: if *tpl_name* is not given
 
     """
     file = "{name}.tpl".format(name=tpl_name)
-
     #: for python 2.7
     try:
         FileNotFoundError

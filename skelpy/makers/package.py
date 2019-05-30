@@ -14,13 +14,12 @@ from .base import BaseMaker
 class PackageMaker(BaseMaker):
     """*Maker* class to create the package directory and main driver file for the package
 
-    The name of the package directory is the same as the project name and
-    the name of the main driver file to be created is ``main.py``.
+    The name of the package directory is the same as the project name.
     However, the structure of package directory differs depending on the
     ``--format`` option.
 
     *skelpy* provides two kinds of package format: "basic" and "src".
-    The directory tree below shows the differences of the two formats ::
+    The directory trees below show the differences of the two formats ::
 
         basic format(default)                     src format
 
