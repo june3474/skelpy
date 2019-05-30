@@ -294,7 +294,7 @@ def open_with_associated_application(filePath, block=False, *args):
         - OS X: open
         - Cygwin: cygstart
 
-    .. Notes::
+    .. Note::
 
         Although :func:`subprocess.call` is a blocking function, Most--well,
         if not all--general-purpose openers, by default, do not wait until
@@ -317,7 +317,7 @@ def open_with_associated_application(filePath, block=False, *args):
         Also be informed that :func:`startfile` function provided by python
         :mod:`os` module is only for Windows and non-blocking.
 
-    .. Notes::
+    .. Note::
 
         On Cygwin, the path of the application to run should follow the *nix-style,
         which uses '/' as the path separator. However, the path-style of the file
