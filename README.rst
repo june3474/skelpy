@@ -3,10 +3,29 @@ python projects. In addition to creating basic directories for a project,
 *skelpy* generates several configuration files for widely-used tools.
 Those include:
 
-    * ``setup.py`` and ``setup.cfg`` for setuptools
+    * ``setup.py`` and ``setup.cfg`` for `setuptools <https://setuptools.readthedocs.io/en/latest/>`_
     * ``conf.py``, ``index.rst`` for `sphinx <http://www.sphinx-doc.org/en/master/>`_ documentation
 
-For the complete directory structure and files to be created, see `quick_start`_
+For the complete directory structure and files for *skelpy* to create, see `quick_start`_
+
+Features
+========
+
+OS Independent
+--------------
+*skelpy* supports Linux, Windows, OSX and Cygwin.
+
+No Dependency
+-------------
+*skelpy* was written in pure python and requires no extra library or module
+unless you want to run the test codes of *skelpy* yourself.
+In that case, you will need `pytest <https://docs.pytest.org/en/latest/>`_
+and `mock <https://pypi.org/project/mock/>`_ (only if you use python 2.7 and
+3.3 downward)
+
+Support python 2.7 and 3.x
+--------------------------
+*skelpy* works well on python 2.7 and 3.x.
 
 Install
 =======
@@ -26,8 +45,8 @@ install directory, which is ~/.local/ on linux and Mac,
 
 From Git
 --------
-Another option is to build an executable zip file. *skelpy*'s ``setup.py``
-can build the zip-formatted executable.
+Another option is to download *skelpy*'s source codes using ``git`` and to build an
+executable zip file. *skelpy*'s ``setup.py`` can build the zip-formatted executable.
 To do that, run the command below in order::
 
     $ git clone https://github.com/june3474/skelpy.git
@@ -35,7 +54,7 @@ To do that, run the command below in order::
     $ python setup.py ezip
 
 Now you will be able to find an excutable zip file named ``skelpy.zip``
-in the``dist`` directory .
+in the ``dist`` directory .
 Once got the zip file--changing the name of the zip file is OK--,
 you can directly run the zip file as if it were a python module like below::
 
