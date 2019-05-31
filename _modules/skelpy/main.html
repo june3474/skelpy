@@ -1,0 +1,330 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>skelpy.main &#8212; skelpy 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for skelpy.main</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;entry point to skelpy</span>
+
+<span class="sd">main.py is the front-end module that parses the command line options and creates</span>
+<span class="sd">the project-structure accordingly.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">skelpy.makers</span> <span class="k">import</span> <span class="n">settings</span><span class="p">,</span> <span class="n">get_maker</span>
+<span class="kn">from</span> <span class="nn">skelpy.utils.defaultsubparse</span> <span class="k">import</span> <span class="n">DefaultSubcommandArgParser</span>
+<span class="kn">import</span> <span class="nn">skelpy.utils.helpers</span> <span class="k">as</span> <span class="nn">helpers</span>
+
+
+<span class="k">def</span> <span class="nf">_setup_arg_parser</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Setup command-line option parser</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">DefaultSubcommandArgParser</span><span class="p">()</span>
+    <span class="n">subparsers</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;sub-command&#39;</span><span class="p">)</span>
+
+    <span class="c1">#: main options</span>
+    <span class="c1">#: setting &#39;prog&#39; prevents showing subparser&#39;s name in the usage output</span>
+    <span class="n">main_parser</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s1">&#39;template&#39;</span><span class="p">,</span>
+                                        <span class="n">prog</span><span class="o">=</span><span class="s1">&#39;skelpy&#39;</span><span class="p">,</span>
+                                        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;A simple template tool for a python project.&#39;</span><span class="p">,</span>
+                                        <span class="n">epilog</span><span class="o">=</span><span class="s2">&quot;For the &#39;license&#39; sub-command, see &#39;skelpy license --help&#39;.&quot;</span><span class="p">)</span>
+
+    <span class="n">main_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;projectName&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;ProjectName&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span>
+                             <span class="n">default</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;project(directory) name to create&#39;</span><span class="p">)</span>
+    <span class="n">main_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-F&#39;</span><span class="p">,</span> <span class="s1">&#39;--format&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;basic&#39;</span><span class="p">,</span>
+                             <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;basic&#39;</span><span class="p">,</span> <span class="s1">&#39;src&#39;</span><span class="p">],</span>
+                             <span class="n">help</span><span class="o">=</span><span class="s1">&#39;format of directory structure [default: </span><span class="si">%(default)s</span><span class="s1">]&#39;</span><span class="p">)</span>
+    <span class="n">main_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-T&#39;</span><span class="p">,</span> <span class="s1">&#39;--test&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;pytest&#39;</span><span class="p">,</span>
+                             <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;unittest&#39;</span><span class="p">,</span> <span class="s1">&#39;pytest&#39;</span><span class="p">],</span>
+                             <span class="n">help</span><span class="o">=</span><span class="s1">&#39;testing tool [default: </span><span class="si">%(default)s</span><span class="s1">]&#39;</span><span class="p">)</span>
+    <span class="n">main_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-q&#39;</span><span class="p">,</span> <span class="s1">&#39;--quiet&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+                             <span class="n">help</span><span class="o">=</span><span class="s1">&#39;skip editing setup.cfg file [default: </span><span class="si">%(default)s</span><span class="s1">]&#39;</span><span class="p">)</span>
+    <span class="n">main_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span> <span class="s1">&#39;--merge&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+                             <span class="n">help</span><span class="o">=</span><span class="s1">&#39;overlap project onto existing directory [default: </span><span class="si">%(default)s</span><span class="s1">]&#39;</span><span class="p">)</span>
+    <span class="n">main_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="s1">&#39;--force&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+                             <span class="n">help</span><span class="o">=</span><span class="s1">&#39;overwrite existing files [default: </span><span class="si">%(default)s</span><span class="s1">]&#39;</span><span class="p">)</span>
+    <span class="n">main_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-v&#39;</span><span class="p">,</span> <span class="s1">&#39;--verbose&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+                             <span class="n">help</span><span class="o">=</span><span class="s1">&#39;show verbose messages [default: </span><span class="si">%(default)s</span><span class="s1">]&#39;</span><span class="p">)</span>
+
+    <span class="c1">#: license sub-command options</span>
+    <span class="n">lic_parser</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s1">&#39;license&#39;</span><span class="p">,</span> <span class="n">prog</span><span class="o">=</span><span class="s1">&#39;skelpy license&#39;</span><span class="p">)</span>
+    <span class="n">lic_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;license&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;LICENSE&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s1">&#39;new license to create or change to&#39;</span><span class="p">)</span>
+    <span class="n">lic_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-l&#39;</span><span class="p">,</span> <span class="s1">&#39;--list&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s1">&#39;show licenses supported by templater&#39;</span><span class="p">)</span>
+    <span class="n">lic_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-v&#39;</span><span class="p">,</span> <span class="s1">&#39;--verbose&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_false&#39;</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s1">&#39;show verbose messages [default: </span><span class="si">%(default)s</span><span class="s1">]&#39;</span><span class="p">)</span>
+
+    <span class="c1">#: assign a front-end function to each sub-parser</span>
+    <span class="n">main_parser</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">_skel</span><span class="p">)</span>
+    <span class="n">lic_parser</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">_license</span><span class="p">)</span>
+    <span class="c1">#: set the default sub-parser to main_parser</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">set_default_subparser</span><span class="p">(</span><span class="s1">&#39;template&#39;</span><span class="p">)</span>
+    <span class="c1">#: combine usage messages of main_parser and lic_parser</span>
+    <span class="n">main_parser</span><span class="o">.</span><span class="n">usage</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">combine_usage</span><span class="p">([</span><span class="n">main_parser</span><span class="p">,</span> <span class="n">lic_parser</span><span class="p">])</span>
+    <span class="c1">#: replace the top-most parser&#39;s usage and help messages for main sub-parser&#39;s</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">format_usage</span> <span class="o">=</span> <span class="n">main_parser</span><span class="o">.</span><span class="n">format_usage</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">format_help</span> <span class="o">=</span> <span class="n">main_parser</span><span class="o">.</span><span class="n">format_help</span>
+    <span class="c1">#: for easy reference to sub-parsers</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">main_parser</span> <span class="o">=</span> <span class="n">main_parser</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">lic_parser</span> <span class="o">=</span> <span class="n">lic_parser</span>
+
+    <span class="k">return</span> <span class="n">parser</span>
+
+
+<span class="k">def</span> <span class="nf">_setup_logger</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;setup the root logger</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        none</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">FORMAT</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%(asctime)-s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_parse_projectName</span><span class="p">(</span><span class="n">projectName</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;parse :attr:`projectName` to get sheer projectName and projectDir</span>
+
+<span class="sd">    After parsing, this method updates ``projectDir`` and ``projectName`` values</span>
+<span class="sd">    in :attr:`settings`</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        projectName (str): project name the user input, possibly contains path</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: (projectDir, projectName)</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">           projectDir should include the *projectName* as its the last components,</span>
+<span class="sd">           In other words, the following statement must be True.</span>
+
+<span class="sd">               ``os.path.split(projectDir)[-1] == projectName``</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">helpers</span><span class="o">.</span><span class="n">root_path</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">projectName</span><span class="p">:</span>
+        <span class="n">projectDir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+        <span class="c1">#: run in the root directory but did not provide project name</span>
+        <span class="k">if</span> <span class="n">helpers</span><span class="o">.</span><span class="n">is_rootDir</span><span class="p">(</span><span class="n">projectDir</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">projectDir</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>
+        <span class="c1">#: not in the root directory</span>
+        <span class="n">projectName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">projectDir</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">projectName</span><span class="p">)</span> <span class="o">==</span> <span class="n">root</span><span class="p">:</span>   <span class="c1"># maybe too much?</span>
+        <span class="k">return</span> <span class="n">root</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1">#: remove trailing os.sep</span>
+        <span class="k">if</span> <span class="n">projectName</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">):</span>
+            <span class="n">projectName</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">projectName</span><span class="p">)</span>
+
+        <span class="c1">#: if the path given is not absolute, abspath() returns getcwd() + path</span>
+        <span class="c1">#: abspath() includes normpath()</span>
+        <span class="n">projectDir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">projectName</span><span class="p">)</span>
+        <span class="n">projectName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">projectDir</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">projectDir</span><span class="p">,</span> <span class="n">projectName</span>
+
+
+<span class="k">def</span> <span class="nf">_skel</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;create the skeleton of a python project</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        opts (dict): arguments passed from command line, i.e, sys.argv[1:]</span>
+<span class="sd">        |FYI, sub-command is not passed</span>
+<span class="sd">        parser (obj): instance of :class:`DefaultSubcommandArgParser` class</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">projectDir</span><span class="p">,</span> <span class="n">projectName</span> <span class="o">=</span> <span class="n">_parse_projectName</span><span class="p">(</span><span class="n">opts</span><span class="p">[</span><span class="s1">&#39;projectName&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">projectName</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s2">&quot;[skelpy] Invalid project name: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">projectName</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;projectDir&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">projectDir</span>
+    <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;projectName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">projectName</span>
+    <span class="n">settings</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">opts</span><span class="p">)</span>
+
+    <span class="n">maker_cls</span> <span class="o">=</span> <span class="n">get_maker</span><span class="p">(</span><span class="s1">&#39;project&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">maker_cls</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">maker</span> <span class="o">=</span> <span class="n">maker_cls</span><span class="p">(</span><span class="o">**</span><span class="n">settings</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">maker</span><span class="o">.</span><span class="n">generate</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">def</span> <span class="nf">_license</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;do license sub-command jobs, i.e., creating or changing a license</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        opts (dict): arguments passed from command line, i.e, sys.argv[1:]</span>
+<span class="sd">        |FYI, sub-command is not passed</span>
+<span class="sd">        parser (obj): instance of :class:`DefaultSubcommandArgParser` class</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#: if neither list option nor license argument is given</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;list&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;license&#39;</span><span class="p">):</span>
+        <span class="c1"># ArgumentParser.error() terminates the process.</span>
+        <span class="c1"># no need to call return of sys.exit()</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">lic_parser</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+            <span class="s2">&quot;Either &#39;-l/--list&#39; option or &#39;LICENSE&#39; argument is required.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">maker_cls</span> <span class="o">=</span> <span class="n">get_maker</span><span class="p">(</span><span class="s1">&#39;license_change&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">maker_cls</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s2">&quot;[skelpy] Maker module not found: &#39;license_change.py&#39;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">maker</span> <span class="o">=</span> <span class="n">maker_cls</span><span class="p">(</span><span class="o">**</span><span class="n">opts</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">maker</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="run"><a class="viewcode-back" href="../../api/skelpy.html#skelpy.main.run">[docs]</a><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;driver to run ``skelpy``</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_setup_logger</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">argv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">_setup_arg_parser</span><span class="p">()</span>
+        <span class="n">opts</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">argv</span><span class="p">))</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;[skelpy] &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;For help, use --help</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">2</span>
+
+    <span class="c1"># MAIN BODY #</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">opts</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">disable</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">)</span>
+
+    <span class="n">func</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;func&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">func</span><span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">parser</span><span class="p">):</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Successfully done.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Failed.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">print_usage</span><span class="p">()</span>
+        <span class="k">return</span> <span class="mi">1</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">run</span><span class="p">())</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">skelpy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, dks.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

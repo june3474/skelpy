@@ -1,0 +1,8 @@
+skelpy.templates package
+========================
+
+.. automodule:: skelpy.templates
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

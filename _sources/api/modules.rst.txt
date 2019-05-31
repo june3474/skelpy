@@ -1,0 +1,7 @@
+skelpy
+======
+
+.. toctree::
+   :maxdepth: 4
+
+   skelpy

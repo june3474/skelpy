@@ -1,0 +1,325 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>skelpy.makers.base &#8212; skelpy 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for skelpy.makers.base</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;This module defines :class:`MakerMeta` and :class:`BaseMaker` classes&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+<span class="kn">from</span> <span class="nn">skelpy.utils.helpers</span> <span class="k">import</span> <span class="n">add_metaclass</span>
+<span class="kn">from</span> <span class="nn">skelpy.utils.logger</span> <span class="k">import</span> <span class="n">Logger</span>
+<span class="kn">from</span> <span class="nn">skelpy.templates</span> <span class="k">import</span> <span class="n">get_template</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">settings</span>
+
+
+<div class="viewcode-block" id="MakerMeta"><a class="viewcode-back" href="../../../api/skelpy.makers.html#skelpy.makers.base.MakerMeta">[docs]</a><span class="k">class</span> <span class="nc">MakerMeta</span><span class="p">(</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Metaclass for :class:`BaseMaker` class</span>
+
+<span class="sd">    ``MakerMeta`` is a metaclass which subclasses :class:`ABCMeta`.</span>
+<span class="sd">    In addition to the features of its superclass :class:`!ABCMeta`,</span>
+<span class="sd">    This metaclass provides all subclasses of :class:`BaseMaker` class</span>
+<span class="sd">    with extra works of calling :func:`_export` and :func:`_get_logger`</span>
+<span class="sd">    functions when they are first imported.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        className (str): class name</span>
+<span class="sd">        superClasses (:obj:`class`): parent classes</span>
+<span class="sd">        attrDict (dict): dictionary of attributes</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">className</span><span class="p">,</span> <span class="n">superClasses</span><span class="p">,</span> <span class="n">attrDict</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MakerMeta</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">className</span><span class="p">,</span> <span class="n">superClasses</span><span class="p">,</span> <span class="n">attrDict</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_export</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_get_logger</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BaseMaker"><a class="viewcode-back" href="../../../api/skelpy.makers.html#skelpy.makers.base.BaseMaker">[docs]</a><span class="nd">@add_metaclass</span><span class="p">(</span><span class="n">MakerMeta</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">BaseMaker</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Abstract class for *Maker* classes&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_export</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;set the module-level variable(attribute) ``Maker``</span>
+
+<span class="sd">        ``Maker`` is set to the *Maker* class defined in the module.</span>
+
+<span class="sd">        For example, if you define a *Maker* class ``AwesomeMaker`` in the</span>
+<span class="sd">        module named``awesome``, ``Maker`` attribute of ``awesome`` module,</span>
+<span class="sd">        i.e., ``awesome.Maker`` would be set to the class ``AwesomeMaker``.</span>
+<span class="sd">        This functionality makes it easy to identify a *Maker* class defined</span>
+<span class="sd">        in a module just by importing the module.</span>
+
+<span class="sd">        This class method is automatically run by the :class:`MakerMeta`</span>
+<span class="sd">        metaclass when a module containing a subclass of :class:`BaseMaker`</span>
+<span class="sd">        is first imported.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cls (:obj:`class`): the most specific--i.e., lowest--*Maker* class.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            none</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__module__</span><span class="p">]</span><span class="o">.</span><span class="n">Maker</span> <span class="o">=</span> <span class="bp">cls</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_logger</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;setup a logger--actually :class:`LoggerAdapter`--for the class</span>
+<span class="sd">        </span>
+<span class="sd">        Like :method:`_export`, this class method is automatically run by the</span>
+<span class="sd">        :class:`MakerMeta` metaclass too.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cls (class): the most specific--i.e., lowest--Maker class.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;skelpy&#39;</span><span class="p">),</span> <span class="p">{</span><span class="s1">&#39;maker&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">})</span>
+
+<div class="viewcode-block" id="BaseMaker.create_dir"><a class="viewcode-back" href="../../../api/skelpy.makers.html#skelpy.makers.base.BaseMaker.create_dir">[docs]</a>    <span class="k">def</span> <span class="nf">create_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;create a directory</span>
+
+<span class="sd">        The default mode is 0777 (octal). If the directory to create exists,</span>
+<span class="sd">        this method does nothing.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            target_dir (str): directory path to create</span>
+<span class="sd">            recursive (bool): create a directory recursively, i.e., makes all</span>
+<span class="sd">                intermediate-level directories needed to contain the target_dir.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: ``1`` if the directory is newly created; ``-1`` if the directory</span>
+<span class="sd">            exists and ``--merge`` option is ``True``; ``0`` if if the directory</span>
+<span class="sd">            exists and ``--merge`` option is ``False``.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            OSError(python 2.7) or PermissionError(python 3.x)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span> <span class="k">if</span> <span class="n">recursive</span> <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span>
+            
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">target_dir</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;directory exists: &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target_dir</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;Project will merge with the existing directory.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                    <span class="s2">&quot;To overlap onto the existing directory, &quot;</span>
+                    <span class="s2">&quot;try -m/--merge option.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="n">cmd</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="mo">0o755</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;created directory: &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target_dir</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="BaseMaker.write_file"><a class="viewcode-back" href="../../../api/skelpy.makers.html#skelpy.makers.base.BaseMaker.write_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">target_file</span><span class="p">,</span> <span class="n">post_jobs</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;create a file based on the given *template*.</span>
+
+<span class="sd">        *template* could be a string(template-file-name) or</span>
+<span class="sd">        an instance of :class:`string.Template`.</span>
+<span class="sd">        If the file to create exists already, the behavior of this method</span>
+<span class="sd">        depends on the ``--force`` option. If ``force`` option is True,</span>
+<span class="sd">        the new file will overwrite the existing file. Otherwise,</span>
+<span class="sd">        it does noting.</span>
+
+<span class="sd">        Before writing the file, this method performs</span>
+<span class="sd">        :meth:`string.Template.safe_substitute` with values in :attr:`makers.settings`.</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            Functions in ``post_jobs`` list are run after ``safe_substitute()``</span>
+<span class="sd">            and before writing the final target_file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            template (:obj:`string.Template` or str): :obj:`string.Template` object</span>
+<span class="sd">                or the name of a template file.</span>
+<span class="sd">            target_file (str): file path to create</span>
+<span class="sd">            post_jobs (:obj:`list` of :obj:`str`): list of functions or callable</span>
+<span class="sd">                object that would run after doing :meth:`Template.safe_substitute`.</span>
+
+<span class="sd">                .. warning::</span>
+
+<span class="sd">                    Each function in the ``post_jobs`` should take a ``str`` as its</span>
+<span class="sd">                    argument, which is, in effect, the return value of the</span>
+<span class="sd">                    :meth:`string.Template.safe_substitute`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str or None: *target_file*, i.e., path of the newly created file</span>
+<span class="sd">                if successful, None otherwise.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">template</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">tpl</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">tpl</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s2">&quot;failed to retrieve the template file: &#39;</span><span class="si">{}</span><span class="s2">.tpl&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">template</span><span class="p">))</span>
+                <span class="k">return</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">template</span> <span class="o">=</span> <span class="n">tpl</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">target_file</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;file exists: &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target_file</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">force</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;overwriting...&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;skipping... &quot;</span>
+                    <span class="s2">&quot;To overwrite, try -f/--force option&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="n">content</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">safe_substitute</span><span class="p">(</span><span class="o">**</span><span class="n">settings</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">post_jobs</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">post_jobs</span><span class="p">:</span>
+                    <span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s2">&quot;Error: failed to apply the post-job function &#39;</span><span class="si">{}</span><span class="s2">&#39;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">target_file</span><span class="p">,</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">fsync</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s2">&quot;Error: failed to write &#39;</span><span class="si">{}</span><span class="s2">&#39;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target_file</span><span class="p">)</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;created file: &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target_file</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">target_file</span></div>
+
+<div class="viewcode-block" id="BaseMaker.generate"><a class="viewcode-back" href="../../../api/skelpy.makers.html#skelpy.makers.base.BaseMaker.generate">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Abstract method that all subclasses must implement.</span>
+
+<span class="sd">        All *Maker* classes should do their jobs by overriding this method.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if successful, False otherwise</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">skelpy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../makers.html">skelpy.makers</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, dks.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

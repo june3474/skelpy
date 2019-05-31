@@ -1,0 +1,29 @@
+skelpy package
+==============
+
+.. automodule:: skelpy
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+    skelpy.makers
+    skelpy.templates
+    skelpy.utils
+
+Submodules
+----------
+
+skelpy.main module
+------------------
+
+.. automodule:: skelpy.main
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+

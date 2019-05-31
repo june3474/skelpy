@@ -1,0 +1,92 @@
+skelpy.makers package
+=====================
+
+.. automodule:: skelpy.makers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Submodules
+----------
+
+skelpy.makers.base module
+-------------------------
+
+.. automodule:: skelpy.makers.base
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+skelpy.makers.docs module
+-------------------------
+
+.. automodule:: skelpy.makers.docs
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+skelpy.makers.license module
+----------------------------
+
+.. automodule:: skelpy.makers.license
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+skelpy.makers.license\_change module
+------------------------------------
+
+.. automodule:: skelpy.makers.license_change
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+skelpy.makers.package module
+----------------------------
+
+.. automodule:: skelpy.makers.package
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+skelpy.makers.project module
+----------------------------
+
+.. automodule:: skelpy.makers.project
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+skelpy.makers.readme module
+---------------------------
+
+.. automodule:: skelpy.makers.readme
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+skelpy.makers.setup module
+--------------------------
+
+.. automodule:: skelpy.makers.setup
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+skelpy.makers.setup\_cfg module
+-------------------------------
+
+.. automodule:: skelpy.makers.setup_cfg
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+skelpy.makers.tests module
+--------------------------
+
+.. automodule:: skelpy.makers.tests
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+

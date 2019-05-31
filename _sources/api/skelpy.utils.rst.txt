@@ -1,0 +1,44 @@
+skelpy.utils package
+====================
+
+.. automodule:: skelpy.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Submodules
+----------
+
+skelpy.utils.defaultsubparse module
+-----------------------------------
+
+.. automodule:: skelpy.utils.defaultsubparse
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+skelpy.utils.helpers module
+---------------------------
+
+.. automodule:: skelpy.utils.helpers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+skelpy.utils.logger module
+--------------------------
+
+.. automodule:: skelpy.utils.logger
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+skelpy.utils.opener module
+--------------------------
+
+.. automodule:: skelpy.utils.opener
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+

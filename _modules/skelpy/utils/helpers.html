@@ -1,0 +1,482 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>skelpy.utils.helpers &#8212; skelpy 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for skelpy.utils.helpers</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># encoding: utf-8</span>
+<span class="sd">&quot;&quot;&quot;Other helper functions&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">absolute_import</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<div class="viewcode-block" id="is_valid_identifier"><a class="viewcode-back" href="../../../api/skelpy.utils.html#skelpy.utils.helpers.is_valid_identifier">[docs]</a><span class="k">def</span> <span class="nf">is_valid_identifier</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if the string is a valid project/package name.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        Valid characters for ``projectName`` are::</span>
+
+<span class="sd">            * uppercase and lowercase letters A through Z</span>
+<span class="sd">            * underscore &#39;_&#39;</span>
+<span class="sd">            * the digits 0 through 9 except for the first character</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        string (str): project/package name</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True if string is valid project/package name else False</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">import</span> <span class="nn">re</span>
+    <span class="kn">import</span> <span class="nn">keyword</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;[_A-Za-z][_a-zA-Z0-9]*$&quot;</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">keyword</span><span class="o">.</span><span class="n">iskeyword</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="has_command"><a class="viewcode-back" href="../../../api/skelpy.utils.html#skelpy.utils.helpers.has_command">[docs]</a><span class="k">def</span> <span class="nf">has_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if the given command is available on the system</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cmd (str): command to check</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True if available, otherwise False</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">import</span> <span class="nn">subprocess</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">subprocess</span> <span class="k">import</span> <span class="n">DEVNULL</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">DEVNULL</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">devnull</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;win32&#39;</span><span class="p">:</span>
+        <span class="n">checker</span> <span class="o">=</span> <span class="s1">&#39;where&#39;</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># linux, OSX, cygwin</span>
+        <span class="n">checker</span> <span class="o">=</span> <span class="s1">&#39;which&#39;</span>
+
+    <span class="k">return</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">(</span><span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="n">checker</span><span class="p">,</span> <span class="n">cmd</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">DEVNULL</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">DEVNULL</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="has_module"><a class="viewcode-back" href="../../../api/skelpy.utils.html#skelpy.utils.helpers.has_module">[docs]</a><span class="k">def</span> <span class="nf">has_module</span><span class="p">(</span><span class="n">modName</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if the module is installed</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        modName (str): module name to check</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True if installed, otherwise False</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">pkgutil</span> <span class="k">import</span> <span class="n">iter_modules</span>
+
+    <span class="k">return</span> <span class="n">modName</span> <span class="ow">in</span> <span class="p">(</span><span class="n">name</span> <span class="k">for</span> <span class="n">loader</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ispkg</span> <span class="ow">in</span> <span class="n">iter_modules</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="get_gitConfig"><a class="viewcode-back" href="../../../api/skelpy.utils.html#skelpy.utils.helpers.get_gitConfig">[docs]</a><span class="k">def</span> <span class="nf">get_gitConfig</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;read ``.gitconfig`` file in the user&#39;s ``$HOME`` directory, if exists</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        :class:`ConfigParser` or None: ConfigParser object filled with info</span>
+<span class="sd">        read from ``.gitconfig``</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">errno</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">configparser</span> <span class="k">import</span> <span class="n">ConfigParser</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">ConfigParser</span> <span class="k">import</span> <span class="n">ConfigParser</span>
+
+    <span class="n">home</span> <span class="o">=</span> <span class="s1">&#39;HOMEPATH&#39;</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;win32&#39;</span> <span class="k">else</span> <span class="s1">&#39;HOME&#39;</span>
+    <span class="n">git_config_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">home</span><span class="p">],</span> <span class="s1">&#39;.gitconfig&#39;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">git_config_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">IOError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>   <span class="c1"># no .gitconfig</span>
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">StringIO</span> <span class="k">import</span> <span class="n">StringIO</span>  <span class="c1"># python 2</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">StringIO</span>  <span class="c1"># python 3</span>
+
+    <span class="c1"># white space on the left side hinders ConfigParse&#39;s parsing</span>
+    <span class="n">stripped_data</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">line</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">data</span><span class="p">])</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">stripped_data</span><span class="p">)</span>
+    <span class="n">gitConfig</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">gitConfig</span><span class="o">.</span><span class="n">readfp</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">gitConfig</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gitConfig</span></div>
+
+
+<div class="viewcode-block" id="get_userName"><a class="viewcode-back" href="../../../api/skelpy.utils.html#skelpy.utils.helpers.get_userName">[docs]</a><span class="k">def</span> <span class="nf">get_userName</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;read the user&#39;s name from ``.gitconfig`` file in the ``$HOME`` directory or</span>
+<span class="sd">    the environmental variable ``USER``</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: user&#39;s name</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">configparser</span> <span class="k">import</span> <span class="n">NoOptionError</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">ConfigParser</span> <span class="k">import</span> <span class="n">NoOptionError</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="c1"># first, try .gitconfig</span>
+    <span class="n">gitConfig</span> <span class="o">=</span> <span class="n">get_gitConfig</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">gitConfig</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">gitConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="n">NoOptionError</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+    <span class="c1"># if fail, try environment variables</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="s1">&#39;USERNAME&#39;</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;win32&#39;</span> <span class="k">else</span> <span class="s1">&#39;USER&#39;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">name</span></div>
+
+
+<div class="viewcode-block" id="get_email"><a class="viewcode-back" href="../../../api/skelpy.utils.html#skelpy.utils.helpers.get_email">[docs]</a><span class="k">def</span> <span class="nf">get_email</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;read the user&#39;s name from ``.gitconfig`` file in the ``$HOME`` directory.</span>
+
+<span class="sd">    If ``.gitconfig`` file does not exist, this function improvises an email</span>
+<span class="sd">    address by concatenating user&#39;s name and host name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: user&#39;s email address</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">six.moves.configparser</span> <span class="k">import</span> <span class="n">NoOptionError</span>
+
+    <span class="n">email</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="n">gitConfig</span> <span class="o">=</span> <span class="n">get_gitConfig</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">gitConfig</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">email</span> <span class="o">=</span> <span class="n">gitConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="n">NoOptionError</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+    <span class="c1"># if not successful, we improvise</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">email</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">socket</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">get_userName</span><span class="p">()</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()</span>
+        <span class="n">email</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{user}</span><span class="s2">@</span><span class="si">{host}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">email</span></div>
+
+
+<div class="viewcode-block" id="get_python_version"><a class="viewcode-back" href="../../../api/skelpy.utils.html#skelpy.utils.helpers.get_python_version">[docs]</a><span class="k">def</span> <span class="nf">get_python_version</span><span class="p">(</span><span class="n">short</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;get system&#39;s python version</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        short (bool): select the short version number(major.minor only) or not</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: major.minor if *short* is True, major.minor.release otherwise</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">long_ver</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">short_ver</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">long_ver</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[:</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">short_ver</span> <span class="k">if</span> <span class="n">short</span> <span class="k">else</span> <span class="n">long_ver</span></div>
+
+
+<div class="viewcode-block" id="remove_comment_lines_in_str"><a class="viewcode-back" href="../../../api/skelpy.utils.html#skelpy.utils.helpers.remove_comment_lines_in_str">[docs]</a><span class="k">def</span> <span class="nf">remove_comment_lines_in_str</span><span class="p">(</span><span class="n">text_data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;remove comment lines in binary data</span>
+
+<span class="sd">    Lines starting with &#39;#&#39; or &#39;!&#39; or &#39;REM&#39; are considered to be comments.</span>
+
+<span class="sd">    borrowed from `stackoverflow &lt;https://stackoverflow.com/questions/28401547/how-to-remove-comments-from-a-string&gt;`__</span>
+
+<span class="sd">    .. comment: two underscores are needed above link</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        text_data (str): string to process</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: string with removed comments</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">StringIO</span> <span class="k">import</span> <span class="n">StringIO</span>  <span class="c1"># python 2</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">StringIO</span>  <span class="c1"># python 3</span>
+
+    <span class="n">newData</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">text_data</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+        <span class="c1"># rstrip() will keep the _indent but remove all white spaces including &#39;\n&#39;</span>
+        <span class="n">stripped_line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+        <span class="c1"># The Shebang line should survive. shouldn&#39;t she?</span>
+        <span class="k">if</span> <span class="n">stripped_line</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s1">&#39;#!&#39;</span><span class="p">,</span> <span class="s1">&#39;# -*-&#39;</span><span class="p">)):</span>
+            <span class="n">newData</span> <span class="o">+=</span> <span class="n">line</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="c1"># user wants to leave a comment</span>
+        <span class="k">elif</span> <span class="n">stripped_line</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s1">&#39;##&#39;</span><span class="p">,</span> <span class="s1">&#39;!!&#39;</span><span class="p">)):</span>
+            <span class="n">newData</span> <span class="o">+=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">stripped_line</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">stripped_line</span><span class="p">[:</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="c1"># Also keep existing empty lines</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">stripped_line</span><span class="p">:</span>
+            <span class="n">newData</span> <span class="o">+=</span> <span class="n">line</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="c1"># But remove lines that only contains comments</span>
+        <span class="k">elif</span> <span class="n">stripped_line</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s1">&#39;#&#39;</span><span class="p">,</span> <span class="s1">&#39;!&#39;</span><span class="p">,</span> <span class="s1">&#39;REM&#39;</span><span class="p">)):</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># the comments after the code will remain.</span>
+            <span class="n">newData</span> <span class="o">+=</span> <span class="n">line</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+    <span class="k">return</span> <span class="n">newData</span></div>
+
+
+<div class="viewcode-block" id="remove_comment_lines_in_file"><a class="viewcode-back" href="../../../api/skelpy.utils.html#skelpy.utils.helpers.remove_comment_lines_in_file">[docs]</a><span class="k">def</span> <span class="nf">remove_comment_lines_in_file</span><span class="p">(</span><span class="n">oldFile</span><span class="p">,</span> <span class="n">newFile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;remove comment lines in a file</span>
+
+<span class="sd">    Lines starting with &#39;#&#39; or &#39;!&#39; or &#39;REM&#39; are considered to be comments.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        oldFile (str): file name(possibly including path) to remove comments</span>
+<span class="sd">        newFile (str): file name with being removed comments. if this argument is</span>
+<span class="sd">            not provided or None(default), the newly created file will overwrite the old.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">oldFile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="n">comment_free_data</span> <span class="o">=</span> <span class="n">remove_comment_lines_in_str</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">newFile</span><span class="p">:</span>
+        <span class="n">newFile</span> <span class="o">=</span> <span class="n">oldFile</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">newFile</span><span class="p">,</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">comment_free_data</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">fsync</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="read_setup_cfg"><a class="viewcode-back" href="../../../api/skelpy.utils.html#skelpy.utils.helpers.read_setup_cfg">[docs]</a><span class="k">def</span> <span class="nf">read_setup_cfg</span><span class="p">(</span><span class="n">cfg_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;read ``setup.cfg`` file</span>
+
+<span class="sd">    ``cfg_file`` may contain a path</span>
+
+<span class="sd">    Note:</span>
+
+<span class="sd">        :func:`setuptools.config.read_configuration` has a `problem with encoding under python2`_</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cfg_file (str): path of ``setup.cfg`` file</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: information read from the setup.cfg file  if successful, otherwise an empty dict.</span>
+
+<span class="sd">    .. _problem with encoding under python2:</span>
+<span class="sd">        https://github.com/pypa/setuptools/issues/1136</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">conf_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">StringIO</span> <span class="k">import</span> <span class="n">StringIO</span>  <span class="c1"># python 2</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">StringIO</span>  <span class="c1"># python 3</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">configparser</span> <span class="k">import</span> <span class="n">ConfigParser</span>  <span class="c1"># python3</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">ConfigParser</span> <span class="k">import</span> <span class="n">ConfigParser</span>  <span class="c1"># python2</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cfg_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">remove_comment_lines_in_str</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">conf_dict</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">readfp</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+
+    <span class="c1"># prevent pollution by too many options</span>
+    <span class="n">sections_to_read</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">,</span> <span class="s1">&#39;options&#39;</span><span class="p">,</span> <span class="s1">&#39;options.packages.find&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">sections_to_read</span><span class="p">:</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">opt</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+            <span class="n">conf_dict</span><span class="p">[</span><span class="n">opt</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">value</span>
+
+    <span class="c1"># remove leading &#39;=&#39; of package_dir</span>
+    <span class="n">package_dir</span> <span class="o">=</span> <span class="n">conf_dict</span><span class="p">[</span><span class="s1">&#39;package_dir&#39;</span><span class="p">]</span>
+    <span class="n">conf_dict</span><span class="p">[</span><span class="s1">&#39;package_dir&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">package_dir</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="c1"># special handling for &#39;extras_require&#39; section</span>
+    <span class="n">section</span> <span class="o">=</span> <span class="s1">&#39;options.extras_require&#39;</span>
+    <span class="n">require</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="s1">&#39;options.extras_require&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">opt</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+        <span class="n">val_list</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;; &#39;</span><span class="p">)</span>
+        <span class="n">require</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">opt</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">val_list</span><span class="p">))</span>
+    <span class="n">conf_dict</span><span class="p">[</span><span class="s1">&#39;extras_require&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">require</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">conf_dict</span></div>
+
+
+<div class="viewcode-block" id="add_metaclass"><a class="viewcode-back" href="../../../api/skelpy.utils.html#skelpy.utils.helpers.add_metaclass">[docs]</a><span class="k">def</span> <span class="nf">add_metaclass</span><span class="p">(</span><span class="n">metaclass</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class decorator for creating a class with a metaclass.</span>
+
+<span class="sd">    This function was copied from `six library &lt;https://pypi.org/project/six&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">orig_vars</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">slots</span> <span class="o">=</span> <span class="n">orig_vars</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__slots__&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">slots</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">slots</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">slots</span> <span class="o">=</span> <span class="p">[</span><span class="n">slots</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">slots_var</span> <span class="ow">in</span> <span class="n">slots</span><span class="p">:</span>
+                <span class="n">orig_vars</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">slots_var</span><span class="p">)</span>
+        <span class="n">orig_vars</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;__dict__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">orig_vars</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;__weakref__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">metaclass</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">,</span> <span class="n">orig_vars</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span></div>
+
+
+<div class="viewcode-block" id="is_rootDir"><a class="viewcode-back" href="../../../api/skelpy.utils.html#skelpy.utils.helpers.is_rootDir">[docs]</a><span class="k">def</span> <span class="nf">is_rootDir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;check if the path given is the root directory</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str): path to check</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True if the *path* is root directory, False otherwise</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">==</span> <span class="n">path</span></div>
+
+
+<div class="viewcode-block" id="root_path"><a class="viewcode-back" href="../../../api/skelpy.utils.html#skelpy.utils.helpers.root_path">[docs]</a><span class="k">def</span> <span class="nf">root_path</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;get the root path</span>
+
+<span class="sd">    This function is OS-independent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">skelpy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, dks.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
