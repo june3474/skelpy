@@ -1,0 +1,871 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>skelpy.makers package &#8212; skelpy 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="skelpy.templates package" href="skelpy.templates.html" />
+    <link rel="prev" title="skelpy package" href="skelpy.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-skelpy.makers">
+<span id="skelpy-makers-package"></span><h1>skelpy.makers package<a class="headerlink" href="#module-skelpy.makers" title="Permalink to this headline">¶</a></h1>
+<p>Collection of <em>Maker</em> modules</p>
+<p>A <em>Maker</em> is a class that generates a template.
+This package also provides a package-level attribute(dict) and a function:
+<code class="docutils literal notranslate"><span class="pre">settings</span></code> and <code class="docutils literal notranslate"><span class="pre">get_maker()</span></code>.</p>
+<dl class="attribute">
+<dt id="skelpy.makers.settings">
+<code class="descclassname">skelpy.makers.</code><code class="descname">settings</code><a class="headerlink" href="#skelpy.makers.settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>container(dict) for sharing data across <em>Makers</em></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="skelpy.makers.get_maker">
+<code class="descclassname">skelpy.makers.</code><code class="descname">get_maker</code><span class="sig-paren">(</span><em>mod_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers.html#get_maker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.get_maker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the name of a module, returns the <em>Maker</em> class which is
+defined in that module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mod_name</strong> (<em>str</em>) – name of the module in which a <em>Maker</em> class is defined</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a <em>Maker</em> class–<strong>NOT</strong> an instance– if successful, otherwise None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">a <em>Maker</em> class or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-skelpy.makers.base">
+<span id="skelpy-makers-base-module"></span><h2>skelpy.makers.base module<a class="headerlink" href="#module-skelpy.makers.base" title="Permalink to this headline">¶</a></h2>
+<p>This module defines <a class="reference internal" href="#skelpy.makers.base.MakerMeta" title="skelpy.makers.base.MakerMeta"><code class="xref py py-class docutils literal notranslate"><span class="pre">MakerMeta</span></code></a> and <a class="reference internal" href="#skelpy.makers.base.BaseMaker" title="skelpy.makers.base.BaseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMaker</span></code></a> classes</p>
+<dl class="class">
+<dt id="skelpy.makers.base.BaseMaker">
+<em class="property">class </em><code class="descclassname">skelpy.makers.base.</code><code class="descname">BaseMaker</code><a class="reference internal" href="../_modules/skelpy/makers/base.html#BaseMaker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.base.BaseMaker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Abstract class for <em>Maker</em> classes</p>
+<dl class="method">
+<dt id="skelpy.makers.base.BaseMaker.create_dir">
+<code class="descname">create_dir</code><span class="sig-paren">(</span><em>target_dir</em>, <em>recursive=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/base.html#BaseMaker.create_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.base.BaseMaker.create_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a directory</p>
+<p>The default mode is 0777 (octal). If the directory to create exists,
+this method does nothing.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>target_dir</strong> (<em>str</em>) – directory path to create</li>
+<li><strong>recursive</strong> (<em>bool</em>) – create a directory recursively, i.e., makes all
+intermediate-level directories needed to contain the target_dir.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">1</span></code> if the directory is newly created; <code class="docutils literal notranslate"><span class="pre">-1</span></code> if the directory
+exists and <code class="docutils literal notranslate"><span class="pre">--merge</span></code> option is <code class="docutils literal notranslate"><span class="pre">True</span></code>; <code class="docutils literal notranslate"><span class="pre">0</span></code> if if the directory
+exists and <code class="docutils literal notranslate"><span class="pre">--merge</span></code> option is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">int</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last">OSError(python 2.7) or PermissionError(python 3.x)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skelpy.makers.base.BaseMaker.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/base.html#BaseMaker.generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.base.BaseMaker.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract method that all subclasses must implement.</p>
+<p>All <em>Maker</em> classes should do their jobs by overriding this method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful, False otherwise</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="skelpy.makers.base.BaseMaker.logger">
+<code class="descname">logger</code><em class="property"> = &lt;skelpy.utils.logger.Logger object&gt;</em><a class="headerlink" href="#skelpy.makers.base.BaseMaker.logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skelpy.makers.base.BaseMaker.write_file">
+<code class="descname">write_file</code><span class="sig-paren">(</span><em>template</em>, <em>target_file</em>, <em>post_jobs=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/base.html#BaseMaker.write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.base.BaseMaker.write_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a file based on the given <em>template</em>.</p>
+<p><em>template</em> could be a string(template-file-name) or
+an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">string.Template</span></code>.
+If the file to create exists already, the behavior of this method
+depends on the <code class="docutils literal notranslate"><span class="pre">--force</span></code> option. If <code class="docutils literal notranslate"><span class="pre">force</span></code> option is True,
+the new file will overwrite the existing file. Otherwise,
+it does noting.</p>
+<p>Before writing the file, this method performs
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">string.Template.safe_substitute()</span></code> with values in <code class="xref py py-attr docutils literal notranslate"><span class="pre">makers.settings</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Functions in <code class="docutils literal notranslate"><span class="pre">post_jobs</span></code> list are run after <code class="docutils literal notranslate"><span class="pre">safe_substitute()</span></code>
+and before writing the final target_file.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>template</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">string.Template</span></code> or str) – <code class="xref py py-obj docutils literal notranslate"><span class="pre">string.Template</span></code> object
+or the name of a template file.</li>
+<li><strong>target_file</strong> (<em>str</em>) – file path to create</li>
+<li><strong>post_jobs</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>) – <p>list of functions or callable
+object that would run after doing <code class="xref py py-meth docutils literal notranslate"><span class="pre">Template.safe_substitute()</span></code>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Each function in the <code class="docutils literal notranslate"><span class="pre">post_jobs</span></code> should take a <code class="docutils literal notranslate"><span class="pre">str</span></code> as its
+argument, which is, in effect, the return value of the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">string.Template.safe_substitute()</span></code>.</p>
+</div>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
+<dt><em>target_file</em>, i.e., path of the newly created file</dt>
+<dd><p class="first last">if successful, None otherwise.</p>
+</dd>
+</dl>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str or None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="skelpy.makers.base.Maker">
+<code class="descclassname">skelpy.makers.base.</code><code class="descname">Maker</code><a class="headerlink" href="#skelpy.makers.base.Maker" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#skelpy.makers.base.BaseMaker" title="skelpy.makers.base.BaseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.base.BaseMaker</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="skelpy.makers.base.MakerMeta">
+<em class="property">class </em><code class="descclassname">skelpy.makers.base.</code><code class="descname">MakerMeta</code><span class="sig-paren">(</span><em>className</em>, <em>superClasses</em>, <em>attrDict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/base.html#MakerMeta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.base.MakerMeta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABCMeta</span></code></p>
+<p>Metaclass for <a class="reference internal" href="#skelpy.makers.base.BaseMaker" title="skelpy.makers.base.BaseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMaker</span></code></a> class</p>
+<p><code class="docutils literal notranslate"><span class="pre">MakerMeta</span></code> is a metaclass which subclasses <code class="xref py py-class docutils literal notranslate"><span class="pre">ABCMeta</span></code>.
+In addition to the features of its superclass <code class="xref py py-class docutils literal notranslate"><span class="pre">ABCMeta</span></code>,
+This metaclass provides all subclasses of <a class="reference internal" href="#skelpy.makers.base.BaseMaker" title="skelpy.makers.base.BaseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseMaker</span></code></a> class
+with extra works of calling <code class="xref py py-func docutils literal notranslate"><span class="pre">_export()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">_get_logger()</span></code>
+functions when they are first imported.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>className</strong> (<em>str</em>) – class name</li>
+<li><strong>superClasses</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">class</span></code>) – parent classes</li>
+<li><strong>attrDict</strong> (<em>dict</em>) – dictionary of attributes</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-skelpy.makers.docs">
+<span id="skelpy-makers-docs-module"></span><h2>skelpy.makers.docs module<a class="headerlink" href="#module-skelpy.makers.docs" title="Permalink to this headline">¶</a></h2>
+<p>This module defines <a class="reference internal" href="#skelpy.makers.docs.DocMaker" title="skelpy.makers.docs.DocMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocMaker</span></code></a> class</p>
+<dl class="class">
+<dt id="skelpy.makers.docs.DocMaker">
+<em class="property">class </em><code class="descclassname">skelpy.makers.docs.</code><code class="descname">DocMaker</code><span class="sig-paren">(</span><em>projectDir</em>, <em>merge</em>, <em>force</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/docs.html#DocMaker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.docs.DocMaker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skelpy.makers.base.BaseMaker" title="skelpy.makers.base.BaseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.base.BaseMaker</span></code></a></p>
+<p><em>Maker</em> class to create directories and configuration files for documentation</p>
+<p><code class="docutils literal notranslate"><span class="pre">DocMaker</span></code> creates a directory named “<em>docs</em>” under the project’s root directory.
+Below is the structure of the <em>docs</em> directory to be created:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>project
+└── docs
+    ├── _build
+    ├── _static
+    ├── _templates
+    ├── conf.py
+    ├── index.rst
+    ├── make.bat
+    └── Makefile
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>projectDir</strong> (<em>str</em>) – path of the project directory</li>
+<li><strong>merge</strong> (<em>bool</em>) – Whether to overlap docs directory if the directory
+already exists</li>
+<li><strong>force</strong> (<em>bool</em>) – whether to overwrite if the file with the same name already exists</li>
+<li><strong>kwargs</strong> – extra keyword arguments</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="skelpy.makers.docs.DocMaker.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/docs.html#DocMaker.generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.docs.DocMaker.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Worker method of <a class="reference internal" href="#skelpy.makers.docs.DocMaker" title="skelpy.makers.docs.DocMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocMaker</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful, False otherwise</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="skelpy.makers.docs.DocMaker.logger">
+<code class="descname">logger</code><em class="property"> = &lt;skelpy.utils.logger.Logger object&gt;</em><a class="headerlink" href="#skelpy.makers.docs.DocMaker.logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="skelpy.makers.docs.Maker">
+<code class="descclassname">skelpy.makers.docs.</code><code class="descname">Maker</code><a class="headerlink" href="#skelpy.makers.docs.Maker" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#skelpy.makers.docs.DocMaker" title="skelpy.makers.docs.DocMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.docs.DocMaker</span></code></a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-skelpy.makers.license">
+<span id="skelpy-makers-license-module"></span><h2>skelpy.makers.license module<a class="headerlink" href="#module-skelpy.makers.license" title="Permalink to this headline">¶</a></h2>
+<p>This module defines <a class="reference internal" href="#skelpy.makers.license.LicenseMaker" title="skelpy.makers.license.LicenseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseMaker</span></code></a> class.</p>
+<dl class="class">
+<dt id="skelpy.makers.license.LicenseMaker">
+<em class="property">class </em><code class="descclassname">skelpy.makers.license.</code><code class="descname">LicenseMaker</code><span class="sig-paren">(</span><em>projectDir</em>, <em>force</em>, <em>license</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/license.html#LicenseMaker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.license.LicenseMaker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skelpy.makers.base.BaseMaker" title="skelpy.makers.base.BaseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.base.BaseMaker</span></code></a></p>
+<p><em>Maker</em> class to create <code class="docutils literal notranslate"><span class="pre">LICENSE</span></code> file in the project directory</p>
+<p><code class="docutils literal notranslate"><span class="pre">LicenseMaker</span></code> basically choose the license specified in setup.cfg file.
+But if it can not retrieve a license from the file–for
+example, when the user did not specify a license in setup.cfg– it creates
+the default license, which is the <a class="reference external" href="https://opensource.org/licenses/MIT">MIT license</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>projectDir</strong> (<em>str</em>) – absolute path of project directory to create</li>
+<li><strong>force</strong> (<em>bool</em>) – option for overwriting  if the file exists.</li>
+<li><strong>license</strong> (<em>str</em>) – license to create.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="skelpy.makers.license.LicenseMaker.default_license">
+<code class="descname">default_license</code><a class="headerlink" href="#skelpy.makers.license.LicenseMaker.default_license" title="Permalink to this definition">¶</a></dt>
+<dd><p>default license(class variable)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">default_license</code><em class="property"> = 'MIT'</em></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="skelpy.makers.license.LicenseMaker.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/license.html#LicenseMaker.generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.license.LicenseMaker.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Worker method of <a class="reference internal" href="#skelpy.makers.license.LicenseMaker" title="skelpy.makers.license.LicenseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseMaker</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful, False otherwise</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="skelpy.makers.license.LicenseMaker.is_supported_license">
+<em class="property">static </em><code class="descname">is_supported_license</code><span class="sig-paren">(</span><em>license</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/license.html#LicenseMaker.is_supported_license"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.license.LicenseMaker.is_supported_license" title="Permalink to this definition">¶</a></dt>
+<dd><p>check to see if the license given is supported by <em>skelpy</em> or not</p>
+<p>license name is case-insensitive.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Currently supported licenses are:</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">APACHE</span><span class="p">:</span> <span class="n">Apace</span> <span class="n">License</span>
+<span class="o">*</span> <span class="n">CC0</span><span class="p">:</span> <span class="n">Creative</span> <span class="n">Commons</span> <span class="n">License</span> <span class="k">for</span> <span class="n">public</span> <span class="n">domain</span>
+<span class="o">*</span> <span class="n">GPL2</span><span class="p">:</span> <span class="n">GNU</span> <span class="n">General</span> <span class="n">Public</span> <span class="n">License</span> <span class="n">v2</span><span class="o">.</span><span class="mi">0</span>
+<span class="o">*</span> <span class="n">GPL3</span><span class="p">:</span> <span class="n">GNU</span> <span class="n">General</span> <span class="n">Public</span> <span class="n">License</span> <span class="n">v3</span><span class="o">.</span><span class="mi">0</span>
+<span class="o">*</span> <span class="n">LGPL</span><span class="p">:</span> <span class="n">GNU</span> <span class="n">Lesser</span> <span class="n">General</span> <span class="n">Public</span> <span class="n">License</span> <span class="n">v2</span><span class="o">.</span><span class="mi">1</span>
+<span class="o">*</span> <span class="n">LGPL3</span><span class="p">:</span> <span class="n">GNU</span> <span class="n">Lesser</span> <span class="n">General</span> <span class="n">Public</span> <span class="n">License</span> <span class="n">v3</span><span class="o">.</span><span class="mi">0</span>
+<span class="o">*</span> <span class="n">MIT</span><span class="p">:</span> <span class="n">MIT</span> <span class="n">License</span><span class="p">,</span> <span class="o">**</span><span class="n">Default</span><span class="o">**</span>
+<span class="o">*</span> <span class="n">MOZILLA</span><span class="p">:</span> <span class="n">Mozilla</span> <span class="n">Public</span> <span class="n">License</span> <span class="n">v2</span><span class="o">.</span><span class="mi">0</span>
+<span class="o">*</span> <span class="n">NEW</span><span class="o">-</span><span class="n">BSD</span><span class="p">:</span> <span class="n">New</span> <span class="n">BSD</span><span class="p">(</span><span class="n">Berkeley</span> <span class="n">Software</span> <span class="n">Distribution</span><span class="p">)</span> <span class="n">License</span>
+<span class="o">*</span> <span class="n">SIMPLE</span><span class="o">-</span><span class="n">BSD</span><span class="p">:</span> <span class="n">Simplified</span> <span class="n">BSD</span> <span class="n">License</span>
+<span class="o">*</span> <span class="n">PROPRIETARY</span><span class="p">:</span> <span class="n">Proprietary</span> <span class="n">License</span>
+</pre></div>
+</div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>license</strong> (<em>str</em>) – license name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the license given is supported, False otherwise</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="skelpy.makers.license.LicenseMaker.logger">
+<code class="descname">logger</code><em class="property"> = &lt;skelpy.utils.logger.Logger object&gt;</em><a class="headerlink" href="#skelpy.makers.license.LicenseMaker.logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="skelpy.makers.license.LicenseMaker.print_licenses">
+<em class="property">static </em><code class="descname">print_licenses</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/license.html#LicenseMaker.print_licenses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.license.LicenseMaker.print_licenses" title="Permalink to this definition">¶</a></dt>
+<dd><p>print supported licenses</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="skelpy.makers.license.Maker">
+<code class="descclassname">skelpy.makers.license.</code><code class="descname">Maker</code><a class="headerlink" href="#skelpy.makers.license.Maker" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#skelpy.makers.license.LicenseMaker" title="skelpy.makers.license.LicenseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.license.LicenseMaker</span></code></a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-skelpy.makers.license_change">
+<span id="skelpy-makers-license-change-module"></span><h2>skelpy.makers.license_change module<a class="headerlink" href="#module-skelpy.makers.license_change" title="Permalink to this headline">¶</a></h2>
+<p>This module defines <a class="reference internal" href="#skelpy.makers.license_change.LicenseChanger" title="skelpy.makers.license_change.LicenseChanger"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseChanger</span></code></a> class.</p>
+<dl class="class">
+<dt id="skelpy.makers.license_change.LicenseChanger">
+<em class="property">class </em><code class="descclassname">skelpy.makers.license_change.</code><code class="descname">LicenseChanger</code><span class="sig-paren">(</span><em>list_option</em>, <em>license='MIT'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/license_change.html#LicenseChanger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.license_change.LicenseChanger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skelpy.makers.license.LicenseMaker" title="skelpy.makers.license.LicenseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.license.LicenseMaker</span></code></a></p>
+<p><em>Maker</em> class to change the existing <code class="docutils literal notranslate"><span class="pre">LICENSE</span></code> file</p>
+<p>As of now, LicenseMaker changes <code class="docutils literal notranslate"><span class="pre">LICENSE</span></code> file in the <strong>current</strong>
+<strong>directory</strong>, i.e., in the directory where skelpy is executed or <code class="docutils literal notranslate"><span class="pre">os.getcwd()</span></code>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">LICENSE</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">setup.py</span></code></li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>list</strong> (<em>bool</em>) – if True, print the list of supported licenses without changing
+(default: False)</li>
+<li><strong>license</strong> (<em>str</em>) – license to change to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="skelpy.makers.license_change.LicenseChanger.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/license_change.html#LicenseChanger.generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.license_change.LicenseChanger.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Worker method of <a class="reference internal" href="#skelpy.makers.license_change.LicenseChanger" title="skelpy.makers.license_change.LicenseChanger"><code class="xref py py-class docutils literal notranslate"><span class="pre">LicenseChanger</span></code></a></p>
+<p>This method changes not only the <code class="docutils literal notranslate"><span class="pre">LICENSE</span></code> file under the project
+directory but also the license attribute in the setup.py and the
+setup.cfg accordingly if they exist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful, otherwise False</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="skelpy.makers.license_change.LicenseChanger.logger">
+<code class="descname">logger</code><em class="property"> = &lt;skelpy.utils.logger.Logger object&gt;</em><a class="headerlink" href="#skelpy.makers.license_change.LicenseChanger.logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="skelpy.makers.license_change.Maker">
+<code class="descclassname">skelpy.makers.license_change.</code><code class="descname">Maker</code><a class="headerlink" href="#skelpy.makers.license_change.Maker" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#skelpy.makers.license_change.LicenseChanger" title="skelpy.makers.license_change.LicenseChanger"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.license_change.LicenseChanger</span></code></a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-skelpy.makers.package">
+<span id="skelpy-makers-package-module"></span><h2>skelpy.makers.package module<a class="headerlink" href="#module-skelpy.makers.package" title="Permalink to this headline">¶</a></h2>
+<p>This module defines <a class="reference internal" href="#skelpy.makers.package.PackageMaker" title="skelpy.makers.package.PackageMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageMaker</span></code></a> class</p>
+<dl class="attribute">
+<dt id="skelpy.makers.package.Maker">
+<code class="descclassname">skelpy.makers.package.</code><code class="descname">Maker</code><a class="headerlink" href="#skelpy.makers.package.Maker" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#skelpy.makers.package.PackageMaker" title="skelpy.makers.package.PackageMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.package.PackageMaker</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="skelpy.makers.package.PackageMaker">
+<em class="property">class </em><code class="descclassname">skelpy.makers.package.</code><code class="descname">PackageMaker</code><span class="sig-paren">(</span><em>projectDir</em>, <em>projectName</em>, <em>format</em>, <em>merge</em>, <em>force</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/package.html#PackageMaker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.package.PackageMaker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skelpy.makers.base.BaseMaker" title="skelpy.makers.base.BaseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.base.BaseMaker</span></code></a></p>
+<p><em>Maker</em> class to create the package directory and main driver file for the package</p>
+<p>The name of the package directory is the same as the project name.
+However, the structure of package directory differs depending on the
+<code class="docutils literal notranslate"><span class="pre">--format</span></code> option.</p>
+<p><em>skelpy</em> provides two kinds of package format: “basic” and “src”.
+The directory trees below show the differences of the two formats</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>basic format(default)                     src format
+
+my_project/                               my_project/
+└── my_project/                           └── src/
+    ├── __init__.py                           └── my_project/
+    └── main.py                                   ├── __init__.py
+                                                  └── main.py
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>projectDir</strong> (<em>str</em>) – absolute path of project’s root directory</li>
+<li><strong>projectName</strong> (<em>str</em>) – project name</li>
+<li><strong>format</strong> (<em>str</em>) – type of package directory, i.e., basic or src</li>
+<li><strong>merge</strong> (<em>bool</em>) – whether to overlap package directory if the directory
+already exits</li>
+<li><strong>force</strong> (<em>bool</em>) – whether to overwrite if the file with the same name already exists</li>
+<li><strong>kwargs</strong> – extra keyword arguments</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="skelpy.makers.package.PackageMaker.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/package.html#PackageMaker.generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.package.PackageMaker.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Worker method of <a class="reference internal" href="#skelpy.makers.package.PackageMaker" title="skelpy.makers.package.PackageMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageMaker</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="skelpy.makers.package.PackageMaker.logger">
+<code class="descname">logger</code><em class="property"> = &lt;skelpy.utils.logger.Logger object&gt;</em><a class="headerlink" href="#skelpy.makers.package.PackageMaker.logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-skelpy.makers.project">
+<span id="skelpy-makers-project-module"></span><h2>skelpy.makers.project module<a class="headerlink" href="#module-skelpy.makers.project" title="Permalink to this headline">¶</a></h2>
+<p>This module defines <a class="reference internal" href="#skelpy.makers.project.ProjectMaker" title="skelpy.makers.project.ProjectMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProjectMaker</span></code></a> class.</p>
+<dl class="attribute">
+<dt id="skelpy.makers.project.Maker">
+<code class="descclassname">skelpy.makers.project.</code><code class="descname">Maker</code><a class="headerlink" href="#skelpy.makers.project.Maker" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#skelpy.makers.project.ProjectMaker" title="skelpy.makers.project.ProjectMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.project.ProjectMaker</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="skelpy.makers.project.ProjectMaker">
+<em class="property">class </em><code class="descclassname">skelpy.makers.project.</code><code class="descname">ProjectMaker</code><span class="sig-paren">(</span><em>projectDir</em>, <em>projectName</em>, <em>quiet</em>, <em>merge</em>, <em>force</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/project.html#ProjectMaker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.project.ProjectMaker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skelpy.makers.base.BaseMaker" title="skelpy.makers.base.BaseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.base.BaseMaker</span></code></a></p>
+<p>The master <em>Maker</em> class responsible for creating the whole project tree</p>
+<p>After creating the project directory, <code class="docutils literal notranslate"><span class="pre">ProjectMaker</span></code> creates several
+configuration files in the directory using the appropriate <em>Maker</em>.
+Below are the configuration files to be created:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span>
+<span class="o">*</span> <span class="n">setup</span><span class="o">.</span><span class="n">cfg</span>
+<span class="o">*</span> <span class="n">LICENSE</span>
+<span class="o">*</span> <span class="n">README</span><span class="o">.</span><span class="n">rst</span>
+<span class="o">*</span> <span class="o">.</span><span class="n">gitignore</span>
+</pre></div>
+</div>
+<p>Then <code class="docutils literal notranslate"><span class="pre">ProjectMaker</span></code> creates and runs three sub-makers:
+<code class="docutils literal notranslate"><span class="pre">PackageMaker</span></code>, <code class="docutils literal notranslate"><span class="pre">DockMaker</span></code>, <code class="docutils literal notranslate"><span class="pre">TestMaker</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>projectName</strong> (<em>str</em>) – project name, in effect, the directory to create.</li>
+<li><strong>projectDir</strong> (<em>str</em>) – <p>absolute path of project directory to be created.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>projectDir should include the <em>projectName</em> as its last component.
+In other words, the following statement must be True.</p>
+<blockquote class="last">
+<div><code class="docutils literal notranslate"><span class="pre">os.path.split(projectDir)[-1]</span> <span class="pre">==</span> <span class="pre">projectName</span></code></div></blockquote>
+</div>
+</li>
+<li><strong>merge</strong> (<em>bool</em>) – whether to overlap the project directory if the directory
+already exists</li>
+<li><strong>force</strong> (<em>bool</em>) – whether to overwrite if the file with the same name already exists</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="skelpy.makers.project.ProjectMaker.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/project.html#ProjectMaker.generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.project.ProjectMaker.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Worker method of <a class="reference internal" href="#skelpy.makers.project.ProjectMaker" title="skelpy.makers.project.ProjectMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProjectMaker</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful, False otherwise</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="skelpy.makers.project.ProjectMaker.logger">
+<code class="descname">logger</code><em class="property"> = &lt;skelpy.utils.logger.Logger object&gt;</em><a class="headerlink" href="#skelpy.makers.project.ProjectMaker.logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-skelpy.makers.readme">
+<span id="skelpy-makers-readme-module"></span><h2>skelpy.makers.readme module<a class="headerlink" href="#module-skelpy.makers.readme" title="Permalink to this headline">¶</a></h2>
+<p>This module defines <a class="reference internal" href="#skelpy.makers.readme.ReadmeMaker" title="skelpy.makers.readme.ReadmeMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReadmeMaker</span></code></a> class.</p>
+<dl class="attribute">
+<dt id="skelpy.makers.readme.Maker">
+<code class="descclassname">skelpy.makers.readme.</code><code class="descname">Maker</code><a class="headerlink" href="#skelpy.makers.readme.Maker" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#skelpy.makers.readme.ReadmeMaker" title="skelpy.makers.readme.ReadmeMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.readme.ReadmeMaker</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="skelpy.makers.readme.ReadmeMaker">
+<em class="property">class </em><code class="descclassname">skelpy.makers.readme.</code><code class="descname">ReadmeMaker</code><span class="sig-paren">(</span><em>projectDir</em>, <em>projectName</em>, <em>force</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/readme.html#ReadmeMaker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.readme.ReadmeMaker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skelpy.makers.base.BaseMaker" title="skelpy.makers.base.BaseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.base.BaseMaker</span></code></a></p>
+<p><em>Maker</em> class to create <code class="docutils literal notranslate"><span class="pre">README.rst</span></code> file in the project directory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>projectDir</strong> (<em>str</em>) – absolute path of the project directory</li>
+<li><strong>projectName</strong> (<em>str</em>) – project name</li>
+<li><strong>kwargs</strong> – extra keyword arguments</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="skelpy.makers.readme.ReadmeMaker.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/readme.html#ReadmeMaker.generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.readme.ReadmeMaker.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Worker method of <a class="reference internal" href="#skelpy.makers.readme.ReadmeMaker" title="skelpy.makers.readme.ReadmeMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReadmeMaker</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful, False otherwise</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="skelpy.makers.readme.ReadmeMaker.logger">
+<code class="descname">logger</code><em class="property"> = &lt;skelpy.utils.logger.Logger object&gt;</em><a class="headerlink" href="#skelpy.makers.readme.ReadmeMaker.logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-skelpy.makers.setup">
+<span id="skelpy-makers-setup-module"></span><h2>skelpy.makers.setup module<a class="headerlink" href="#module-skelpy.makers.setup" title="Permalink to this headline">¶</a></h2>
+<p>This module defines <a class="reference internal" href="#skelpy.makers.setup.SetupMaker" title="skelpy.makers.setup.SetupMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">SetupMaker</span></code></a> class</p>
+<dl class="attribute">
+<dt id="skelpy.makers.setup.Maker">
+<code class="descclassname">skelpy.makers.setup.</code><code class="descname">Maker</code><a class="headerlink" href="#skelpy.makers.setup.Maker" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#skelpy.makers.setup.SetupMaker" title="skelpy.makers.setup.SetupMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.setup.SetupMaker</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="skelpy.makers.setup.SetupMaker">
+<em class="property">class </em><code class="descclassname">skelpy.makers.setup.</code><code class="descname">SetupMaker</code><span class="sig-paren">(</span><em>projectDir</em>, <em>force</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/setup.html#SetupMaker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.setup.SetupMaker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skelpy.makers.base.BaseMaker" title="skelpy.makers.base.BaseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.base.BaseMaker</span></code></a></p>
+<p><em>Maker</em> class to create <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> file in the project directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>projectDir</strong> (<em>str</em>) – absolute path of project directory</li>
+<li><strong>force</strong> (<em>bool</em>) – whether to overwrite if <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> already exists</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="skelpy.makers.setup.SetupMaker.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/setup.html#SetupMaker.generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.setup.SetupMaker.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Worker method of <a class="reference internal" href="#skelpy.makers.setup.SetupMaker" title="skelpy.makers.setup.SetupMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">SetupMaker</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="skelpy.makers.setup.SetupMaker.logger">
+<code class="descname">logger</code><em class="property"> = &lt;skelpy.utils.logger.Logger object&gt;</em><a class="headerlink" href="#skelpy.makers.setup.SetupMaker.logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-skelpy.makers.setup_cfg">
+<span id="skelpy-makers-setup-cfg-module"></span><h2>skelpy.makers.setup_cfg module<a class="headerlink" href="#module-skelpy.makers.setup_cfg" title="Permalink to this headline">¶</a></h2>
+<p>This module defines <a class="reference internal" href="#skelpy.makers.setup_cfg.SetupCfgMaker" title="skelpy.makers.setup_cfg.SetupCfgMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">SetupCfgMaker</span></code></a> class.</p>
+<dl class="attribute">
+<dt id="skelpy.makers.setup_cfg.Maker">
+<code class="descclassname">skelpy.makers.setup_cfg.</code><code class="descname">Maker</code><a class="headerlink" href="#skelpy.makers.setup_cfg.Maker" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#skelpy.makers.setup_cfg.SetupCfgMaker" title="skelpy.makers.setup_cfg.SetupCfgMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.setup_cfg.SetupCfgMaker</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="skelpy.makers.setup_cfg.SetupCfgMaker">
+<em class="property">class </em><code class="descclassname">skelpy.makers.setup_cfg.</code><code class="descname">SetupCfgMaker</code><span class="sig-paren">(</span><em>projectDir</em>, <em>projectName</em>, <em>format</em>, <em>quiet</em>, <em>force</em>, <em>test</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/setup_cfg.html#SetupCfgMaker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.setup_cfg.SetupCfgMaker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skelpy.makers.base.BaseMaker" title="skelpy.makers.base.BaseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.base.BaseMaker</span></code></a></p>
+<p><em>Maker</em> class to creates <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> in the project directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>projectDir</strong> (<em>str</em>) – absolute path of project directory to be created.</li>
+<li><strong>projectName</strong> (<em>str</em>) – project name</li>
+<li><strong>format</strong> (<em>str</em>) – package format. See <code class="xref py py-class docutils literal notranslate"><span class="pre">PackageMaker</span></code>.</li>
+<li><strong>force</strong> (<em>bool</em>) – whether to overwrite if <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> already exists</li>
+<li><strong>test</strong> (<em>str</em>) – testing tool to use. i.e., <code class="docutils literal notranslate"><span class="pre">unittest</span></code> or <code class="docutils literal notranslate"><span class="pre">pytest</span></code>
+See <code class="xref py py-class docutils literal notranslate"><span class="pre">TestMaker</span></code>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="skelpy.makers.setup_cfg.SetupCfgMaker.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/setup_cfg.html#SetupCfgMaker.generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.setup_cfg.SetupCfgMaker.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Worker method of <a class="reference internal" href="#skelpy.makers.setup_cfg.SetupCfgMaker" title="skelpy.makers.setup_cfg.SetupCfgMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">SetupCfgMaker</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="skelpy.makers.setup_cfg.SetupCfgMaker.logger">
+<code class="descname">logger</code><em class="property"> = &lt;skelpy.utils.logger.Logger object&gt;</em><a class="headerlink" href="#skelpy.makers.setup_cfg.SetupCfgMaker.logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-skelpy.makers.tests">
+<span id="skelpy-makers-tests-module"></span><h2>skelpy.makers.tests module<a class="headerlink" href="#module-skelpy.makers.tests" title="Permalink to this headline">¶</a></h2>
+<p>This module defines <a class="reference internal" href="#skelpy.makers.tests.TestMaker" title="skelpy.makers.tests.TestMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">TestMaker</span></code></a> class</p>
+<dl class="attribute">
+<dt id="skelpy.makers.tests.Maker">
+<code class="descclassname">skelpy.makers.tests.</code><code class="descname">Maker</code><a class="headerlink" href="#skelpy.makers.tests.Maker" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#skelpy.makers.tests.TestMaker" title="skelpy.makers.tests.TestMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.tests.TestMaker</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="skelpy.makers.tests.TestMaker">
+<em class="property">class </em><code class="descclassname">skelpy.makers.tests.</code><code class="descname">TestMaker</code><span class="sig-paren">(</span><em>projectDir</em>, <em>merge</em>, <em>force</em>, <em>test</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/tests.html#TestMaker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.tests.TestMaker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skelpy.makers.base.BaseMaker" title="skelpy.makers.base.BaseMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">skelpy.makers.base.BaseMaker</span></code></a></p>
+<p><em>Maker</em> class to create directories and configuration files for testing</p>
+<p>TestMaker creates a directory named <code class="docutils literal notranslate"><span class="pre">tests</span></code> and <code class="docutils literal notranslate"><span class="pre">test_main.py</span></code> file in that directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>projectDir</strong> (<em>str</em>) – absolute path of project directory</li>
+<li><strong>force</strong> (<em>bool</em>) – whether to overwrite if <em>test_main.py</em> already exists</li>
+<li><strong>test</strong> (<em>str</em>) – testing tool to use. <em>skelpy</em> supports two testing
+tools: <code class="xref py py-mod docutils literal notranslate"><span class="pre">unittest</span></code> and <a class="reference external" href="https://pytest.org/">pytest(default)</a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="skelpy.makers.tests.TestMaker.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/makers/tests.html#TestMaker.generate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.makers.tests.TestMaker.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Worker method of <a class="reference internal" href="#skelpy.makers.tests.TestMaker" title="skelpy.makers.tests.TestMaker"><code class="xref py py-class docutils literal notranslate"><span class="pre">TestMaker</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="skelpy.makers.tests.TestMaker.logger">
+<code class="descname">logger</code><em class="property"> = &lt;skelpy.utils.logger.Logger object&gt;</em><a class="headerlink" href="#skelpy.makers.tests.TestMaker.logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">skelpy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="skelpy.html">skelpy package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="skelpy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">skelpy.makers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skelpy.templates.html">skelpy.templates package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skelpy.utils.html">skelpy.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skelpy.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skelpy.html#module-skelpy.main">skelpy.main module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">skelpy</a><ul>
+  <li><a href="skelpy.html">skelpy package</a><ul>
+      <li>Previous: <a href="skelpy.html" title="previous chapter">skelpy package</a></li>
+      <li>Next: <a href="skelpy.templates.html" title="next chapter">skelpy.templates package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, dks.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/skelpy.makers.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

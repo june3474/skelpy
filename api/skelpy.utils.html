@@ -1,0 +1,549 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>skelpy.utils package &#8212; skelpy 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="skelpy.templates package" href="skelpy.templates.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-skelpy.utils">
+<span id="skelpy-utils-package"></span><h1>skelpy.utils package<a class="headerlink" href="#module-skelpy.utils" title="Permalink to this headline">¶</a></h1>
+<p>Collection of helper functions and classes</p>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-skelpy.utils.defaultsubparse">
+<span id="skelpy-utils-defaultsubparse-module"></span><h2>skelpy.utils.defaultsubparse module<a class="headerlink" href="#module-skelpy.utils.defaultsubparse" title="Permalink to this headline">¶</a></h2>
+<p>This module defines <code class="xref py py-class docutils literal notranslate"><span class="pre">DefaultSubCommandArgParser</span></code> class</p>
+<dl class="class">
+<dt id="skelpy.utils.defaultsubparse.DefaultSubcommandArgParser">
+<em class="property">class </em><code class="descclassname">skelpy.utils.defaultsubparse.</code><code class="descname">DefaultSubcommandArgParser</code><span class="sig-paren">(</span><em>prog=None</em>, <em>usage=None</em>, <em>description=None</em>, <em>epilog=None</em>, <em>version=None</em>, <em>parents=[]</em>, <em>formatter_class=&lt;class 'argparse.HelpFormatter'&gt;</em>, <em>prefix_chars='-'</em>, <em>fromfile_prefix_chars=None</em>, <em>argument_default=None</em>, <em>conflict_handler='error'</em>, <em>add_help=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/defaultsubparse.html#DefaultSubcommandArgParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.defaultsubparse.DefaultSubcommandArgParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">argparse.ArgumentParser</span></code></p>
+<p>Extended <code class="xref py py-class docutils literal notranslate"><span class="pre">argparse.ArgumentParser</span></code> with the feature of setting the default sub-parser</p>
+<p>This class overrides <code class="xref py py-meth docutils literal notranslate"><span class="pre">ArgumentParse._parse_known_args()</span></code> to insert
+the default sub-parser to the argument list if no sub-command is given.</p>
+<p>codes by Thomas Grainger, from <a class="reference external" href="https://stackoverflow.com/questions/6365601/default-sub-command-or-handling-no-sub-command-with-argparse">stackoverflow</a></p>
+<dl class="staticmethod">
+<dt id="skelpy.utils.defaultsubparse.DefaultSubcommandArgParser.combine_usage">
+<em class="property">static </em><code class="descname">combine_usage</code><span class="sig-paren">(</span><em>parsers</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/defaultsubparse.html#DefaultSubcommandArgParser.combine_usage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.defaultsubparse.DefaultSubcommandArgParser.combine_usage" title="Permalink to this definition">¶</a></dt>
+<dd><p>combine usage-messages of multiple ArgumentParsers into one</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parsers</strong> (<em>list</em>) – ArgumentParsers whose usage-messages to combine</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Combined usage-message</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="skelpy.utils.defaultsubparse.DefaultSubcommandArgParser.get_args_by_group">
+<em class="property">static </em><code class="descname">get_args_by_group</code><span class="sig-paren">(</span><em>arguments</em>, <em>group</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/defaultsubparse.html#DefaultSubcommandArgParser.get_args_by_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.defaultsubparse.DefaultSubcommandArgParser.get_args_by_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>extract arguments that belongs to an argument group</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>arguments</strong> (<em>dict</em>) – whole command-line arguments</li>
+<li><strong>group</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">argparse._ArgumentGroup</span></code>) – argument group</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">arguments belonged to the group</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="skelpy.utils.defaultsubparse.DefaultSubcommandArgParser.set_default_subparser">
+<code class="descname">set_default_subparser</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/defaultsubparse.html#DefaultSubcommandArgParser.set_default_subparser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.defaultsubparse.DefaultSubcommandArgParser.set_default_subparser" title="Permalink to this definition">¶</a></dt>
+<dd><p>set default sub-parser</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – sub-parser’s name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-skelpy.utils.helpers">
+<span id="skelpy-utils-helpers-module"></span><h2>skelpy.utils.helpers module<a class="headerlink" href="#module-skelpy.utils.helpers" title="Permalink to this headline">¶</a></h2>
+<p>Other helper functions</p>
+<dl class="function">
+<dt id="skelpy.utils.helpers.add_metaclass">
+<code class="descclassname">skelpy.utils.helpers.</code><code class="descname">add_metaclass</code><span class="sig-paren">(</span><em>metaclass</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/helpers.html#add_metaclass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.helpers.add_metaclass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class decorator for creating a class with a metaclass.</p>
+<p>This function was copied from <a class="reference external" href="https://pypi.org/project/six">six library</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="skelpy.utils.helpers.get_email">
+<code class="descclassname">skelpy.utils.helpers.</code><code class="descname">get_email</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/helpers.html#get_email"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.helpers.get_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>read the user’s name from <code class="docutils literal notranslate"><span class="pre">.gitconfig</span></code> file in the <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> directory.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">.gitconfig</span></code> file does not exist, this function improvises an email
+address by concatenating user’s name and host name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">user’s email address</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="skelpy.utils.helpers.get_gitConfig">
+<code class="descclassname">skelpy.utils.helpers.</code><code class="descname">get_gitConfig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/helpers.html#get_gitConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.helpers.get_gitConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>read <code class="docutils literal notranslate"><span class="pre">.gitconfig</span></code> file in the user’s <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> directory, if exists</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">ConfigParser object filled with info
+read from <code class="docutils literal notranslate"><span class="pre">.gitconfig</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfigParser</span></code> or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="skelpy.utils.helpers.get_python_version">
+<code class="descclassname">skelpy.utils.helpers.</code><code class="descname">get_python_version</code><span class="sig-paren">(</span><em>short=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/helpers.html#get_python_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.helpers.get_python_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>get system’s python version</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>short</strong> (<em>bool</em>) – select the short version number(major.minor only) or not</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">major.minor if <em>short</em> is True, major.minor.release otherwise</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="skelpy.utils.helpers.get_userName">
+<code class="descclassname">skelpy.utils.helpers.</code><code class="descname">get_userName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/helpers.html#get_userName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.helpers.get_userName" title="Permalink to this definition">¶</a></dt>
+<dd><p>read the user’s name from <code class="docutils literal notranslate"><span class="pre">.gitconfig</span></code> file in the <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> directory or
+the environmental variable <code class="docutils literal notranslate"><span class="pre">USER</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">user’s name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="skelpy.utils.helpers.has_command">
+<code class="descclassname">skelpy.utils.helpers.</code><code class="descname">has_command</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/helpers.html#has_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.helpers.has_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the given command is available on the system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<em>str</em>) – command to check</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if available, otherwise False</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="skelpy.utils.helpers.has_module">
+<code class="descclassname">skelpy.utils.helpers.</code><code class="descname">has_module</code><span class="sig-paren">(</span><em>modName</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/helpers.html#has_module"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.helpers.has_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the module is installed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>modName</strong> (<em>str</em>) – module name to check</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if installed, otherwise False</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="skelpy.utils.helpers.is_rootDir">
+<code class="descclassname">skelpy.utils.helpers.</code><code class="descname">is_rootDir</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/helpers.html#is_rootDir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.helpers.is_rootDir" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if the path given is the root directory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – path to check</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the <em>path</em> is root directory, False otherwise</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="skelpy.utils.helpers.is_valid_identifier">
+<code class="descclassname">skelpy.utils.helpers.</code><code class="descname">is_valid_identifier</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/helpers.html#is_valid_identifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.helpers.is_valid_identifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the string is a valid project/package name.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Valid characters for <code class="docutils literal notranslate"><span class="pre">projectName</span></code> are:</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">uppercase</span> <span class="ow">and</span> <span class="n">lowercase</span> <span class="n">letters</span> <span class="n">A</span> <span class="n">through</span> <span class="n">Z</span>
+<span class="o">*</span> <span class="n">underscore</span> <span class="s1">&#39;_&#39;</span>
+<span class="o">*</span> <span class="n">the</span> <span class="n">digits</span> <span class="mi">0</span> <span class="n">through</span> <span class="mi">9</span> <span class="k">except</span> <span class="k">for</span> <span class="n">the</span> <span class="n">first</span> <span class="n">character</span>
+</pre></div>
+</div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>string</strong> (<em>str</em>) – project/package name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if string is valid project/package name else False</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="skelpy.utils.helpers.read_setup_cfg">
+<code class="descclassname">skelpy.utils.helpers.</code><code class="descname">read_setup_cfg</code><span class="sig-paren">(</span><em>cfg_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/helpers.html#read_setup_cfg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.helpers.read_setup_cfg" title="Permalink to this definition">¶</a></dt>
+<dd><p>read <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> file</p>
+<p><code class="docutils literal notranslate"><span class="pre">cfg_file</span></code> may contain a path</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="xref py py-func docutils literal notranslate"><span class="pre">setuptools.config.read_configuration()</span></code> has a <a class="reference external" href="https://github.com/pypa/setuptools/issues/1136">problem with encoding under python2</a></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cfg_file</strong> (<em>str</em>) – path of <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">information read from the setup.cfg file  if successful, otherwise an empty dict.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="skelpy.utils.helpers.remove_comment_lines_in_file">
+<code class="descclassname">skelpy.utils.helpers.</code><code class="descname">remove_comment_lines_in_file</code><span class="sig-paren">(</span><em>oldFile</em>, <em>newFile=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/helpers.html#remove_comment_lines_in_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.helpers.remove_comment_lines_in_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>remove comment lines in a file</p>
+<p>Lines starting with ‘#’ or ‘!’ or ‘REM’ are considered to be comments.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>oldFile</strong> (<em>str</em>) – file name(possibly including path) to remove comments</li>
+<li><strong>newFile</strong> (<em>str</em>) – file name with being removed comments. if this argument is
+not provided or None(default), the newly created file will overwrite the old.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="skelpy.utils.helpers.remove_comment_lines_in_str">
+<code class="descclassname">skelpy.utils.helpers.</code><code class="descname">remove_comment_lines_in_str</code><span class="sig-paren">(</span><em>text_data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/helpers.html#remove_comment_lines_in_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.helpers.remove_comment_lines_in_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>remove comment lines in binary data</p>
+<p>Lines starting with ‘#’ or ‘!’ or ‘REM’ are considered to be comments.</p>
+<p>borrowed from <a class="reference external" href="https://stackoverflow.com/questions/28401547/how-to-remove-comments-from-a-string">stackoverflow</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text_data</strong> (<em>str</em>) – string to process</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string with removed comments</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="skelpy.utils.helpers.root_path">
+<code class="descclassname">skelpy.utils.helpers.</code><code class="descname">root_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/helpers.html#root_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.helpers.root_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the root path</p>
+<p>This function is OS-independent.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-skelpy.utils.logger">
+<span id="skelpy-utils-logger-module"></span><h2>skelpy.utils.logger module<a class="headerlink" href="#module-skelpy.utils.logger" title="Permalink to this headline">¶</a></h2>
+<p>This module defines <a class="reference internal" href="#skelpy.utils.logger.Logger" title="skelpy.utils.logger.Logger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Logger</span></code></a> class</p>
+<dl class="class">
+<dt id="skelpy.utils.logger.Logger">
+<em class="property">class </em><code class="descclassname">skelpy.utils.logger.</code><code class="descname">Logger</code><span class="sig-paren">(</span><em>logger</em>, <em>extra</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/logger.html#Logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.logger.Logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.LoggerAdapter</span></code></p>
+<p>A simple subclass of <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.LoggerAdapter</span></code> for <em>skelpy</em></p>
+<dl class="method">
+<dt id="skelpy.utils.logger.Logger.process">
+<code class="descname">process</code><span class="sig-paren">(</span><em>msg</em>, <em>kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/logger.html#Logger.process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.logger.Logger.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>overridden method to insert the <cite>Maker</cite>’s name into the log message.</p>
+<p>This method also add to the <em>kwargs</em> the <em>extra</em> dict which is passed when constructed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>msg</strong> (<em>str</em>) – original log message</li>
+<li><strong>kwargs</strong> (<em>dict</em>) – extra information to pass to the underlying <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">log message modified to include <em>Maker</em>’s name
+dict: kwargs plus extra</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-skelpy.utils.opener">
+<span id="skelpy-utils-opener-module"></span><h2>skelpy.utils.opener module<a class="headerlink" href="#module-skelpy.utils.opener" title="Permalink to this headline">¶</a></h2>
+<p>This module offers <a class="reference internal" href="#skelpy.utils.opener.open_with_associated_application" title="skelpy.utils.opener.open_with_associated_application"><code class="xref py py-func docutils literal notranslate"><span class="pre">open_with_associated_application()</span></code></a> which
+opens a file with the associated application.</p>
+<dl class="function">
+<dt id="skelpy.utils.opener.open_with_associated_application">
+<code class="descclassname">skelpy.utils.opener.</code><code class="descname">open_with_associated_application</code><span class="sig-paren">(</span><em>filePath</em>, <em>block=False</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skelpy/utils/opener.html#open_with_associated_application"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skelpy.utils.opener.open_with_associated_application" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the file with the associated application using the <em>“general-purpose opener”</em> program.</p>
+<p>A “<em>general-purpose opener</em>” is a small command-line program which runs a
+certain application associated to the file type. In a rough sense,
+what <em>general-purpose opener</em> does is like double-clicking the file on a
+file-manage program such as Explorer of Windows.
+Below are well-known OSes and their <em>general-purpose openers</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Linux</span><span class="p">:</span> <span class="n">xdg</span><span class="o">-</span><span class="nb">open</span>
+<span class="o">-</span> <span class="n">Windows</span><span class="p">:</span> <span class="n">start</span>
+<span class="o">-</span> <span class="n">OS</span> <span class="n">X</span><span class="p">:</span> <span class="nb">open</span>
+<span class="o">-</span> <span class="n">Cygwin</span><span class="p">:</span> <span class="n">cygstart</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Although <code class="xref py py-func docutils literal notranslate"><span class="pre">subprocess.call()</span></code> is a blocking function, Most–well,
+if not all–general-purpose openers, by default, do not wait until
+the application terminates. For kind-of blocking mode, Windows(<code class="docutils literal notranslate"><span class="pre">start</span></code>)
+and OSX(<code class="docutils literal notranslate"><span class="pre">open</span></code>) provide the option “/WAIT” and “-W”, respectively.
+So, it is possible to run the associated application in the blocking mode
+just by invoking the <em>general-purpose opener</em> with those options.
+For example, on Windows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">start</span> <span class="o">-</span><span class="n">W</span> <span class="n">sample</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>would make a text editor such as <code class="docutils literal notranslate"><span class="pre">notepad.exe</span></code> open the sample.txt file
+and wait until notepad terminates.</p>
+<p>However, that is <strong>not</strong> possible on linux and cygwin, because their
+<em>general-purpose openers</em> do not have such options.
+Thus, for the same effect on linux and cygwin, we have to find
+the associated application and directly run it.</p>
+<p class="last">Also be informed that <code class="xref py py-func docutils literal notranslate"><span class="pre">startfile()</span></code> function provided by python
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">os</span></code> module is only for Windows and non-blocking.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On Cygwin, the path of the application to run should follow the *nix-style,
+which uses ‘/’ as the path separator. However, the path-style of the file
+to open with the application differs from applications.
+As a matter of fact, Windows applications can not recognize the *nix-style
+path. Therefore, when used with a Windows application on Cygwin, the file
+path should be in the Windows-style which uses ‘' as the path
+separator and an optional drive letter.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filePath</strong> (<em>str</em>) – the file name(possibly including path) to open</li>
+<li><strong>args</strong> (<em>str</em>) – other arguments to pass to the application to be invoked</li>
+<li><strong>block</strong> (<em>bool</em>) – if True, execute the application in the blocking mode,
+i.e., wait until the application terminates, otherwise in the
+non-blocking mode.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">retcode of <code class="xref py py-func docutils literal notranslate"><span class="pre">subprocess.call()</span></code> if the application successfully runs,
+otherwise, i.e., when failed to find an associated application, returns -1</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">skelpy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="skelpy.html">skelpy package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="skelpy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="skelpy.makers.html">skelpy.makers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skelpy.templates.html">skelpy.templates package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">skelpy.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skelpy.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="skelpy.html#module-skelpy.main">skelpy.main module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">skelpy</a><ul>
+  <li><a href="skelpy.html">skelpy package</a><ul>
+      <li>Previous: <a href="skelpy.templates.html" title="previous chapter">skelpy.templates package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, dks.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/skelpy.utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

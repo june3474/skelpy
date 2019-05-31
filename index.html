@@ -1,0 +1,263 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>skelpy Documentation &#8212; skelpy 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="skelpy" href="api/modules.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="skelpy-documentation">
+<h1>skelpy Documentation<a class="headerlink" href="#skelpy-documentation" title="Permalink to this headline">¶</a></h1>
+<p><em>skelpy</em> is a simple template tool to create the directory structure for
+python projects. In addition to creating basic directories for a project,
+<em>skelpy</em> generates several configuration files for widely-used tools.
+Those include:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">setup.py</span></code> and <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> for <a class="reference external" href="https://setuptools.readthedocs.io/en/latest/">setuptools</a></li>
+<li><code class="docutils literal notranslate"><span class="pre">conf.py</span></code>, <code class="docutils literal notranslate"><span class="pre">index.rst</span></code> for <a class="reference external" href="http://www.sphinx-doc.org/en/master/">sphinx</a> documentation</li>
+</ul>
+</div></blockquote>
+<p>For the complete directory structure and files for <em>skelpy</em> to create, see <a class="reference internal" href="#quick-start">quick_start</a></p>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="os-independent">
+<h3>OS Independent<a class="headerlink" href="#os-independent" title="Permalink to this headline">¶</a></h3>
+<p><em>skelpy</em> supports Linux, Windows, OSX and Cygwin.</p>
+</div>
+<div class="section" id="no-dependency">
+<h3>No Dependency<a class="headerlink" href="#no-dependency" title="Permalink to this headline">¶</a></h3>
+<p><em>skelpy</em> was written in pure python and requires no extra library or module
+unless you want to run the test codes of <em>skelpy</em> yourself.
+In that case, you will need <a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a>
+and <a class="reference external" href="https://pypi.org/project/mock/">mock</a> (only if you use python 2.7 and
+3.3 downward)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">mock is now part of the Python standard library, available as unittest.mock in Python 3.3 onwards.</p>
+</div>
+</div>
+<div class="section" id="support-python-2-7-and-3-x">
+<h3>Support python 2.7 and 3.x<a class="headerlink" href="#support-python-2-7-and-3-x" title="Permalink to this headline">¶</a></h3>
+<p><em>skelpy</em> works well on python 2.7 and 3.x.</p>
+</div>
+</div>
+<div class="section" id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="from-pypi">
+<h3>From PyPi<a class="headerlink" href="#from-pypi" title="Permalink to this headline">¶</a></h3>
+<p>On the command line, just type either of belows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">skelpy</span>
+<span class="ow">or</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span> <span class="n">skelpy</span>
+</pre></div>
+</div>
+<p>The first one is for system-wide installation and you may need the administrator
+/root privilege. The second command will install <em>skelpy</em> in the user’s python
+install directory, which is ~/.local/ on linux and Mac,
+%APPDATA%Python on Windows.</p>
+</div>
+<div class="section" id="from-git">
+<h3>From Git<a class="headerlink" href="#from-git" title="Permalink to this headline">¶</a></h3>
+<p>Another option is to download <em>skelpy</em>’s source codes using <code class="docutils literal notranslate"><span class="pre">git</span></code> and to build an
+executable zip file. <em>skelpy</em>’s <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> can build the zip-formatted executable.
+To do that, run the command below in order:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/june3474/skelpy.git
+$ cd skelpy
+$ python setup.py ezip
+</pre></div>
+</div>
+<p>Now you will be able to find an excutable zip file named <code class="docutils literal notranslate"><span class="pre">skelpy.zip</span></code>
+in the <code class="docutils literal notranslate"><span class="pre">dist</span></code> directory .
+Once got the zip file–changing the name of the zip file is OK–,
+you can directly run the zip file as if it were a python module like below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">skelpy</span><span class="o">.</span><span class="n">zip</span> <span class="p">[</span><span class="n">options_for_skelpy</span><span class="p">]</span> <span class="p">[</span><span class="n">project_name_to_create</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Or, if you use Linux or any POSIX-compatible OS, you can make the zip file an executable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ echo &#39;#!/usr/bin/env python&#39; &gt; skelpy
+$ cat skelpy-master.zip &gt;&gt; skelpy
+$ chmod u+x skelpy
+</pre></div>
+</div>
+<p>Codes above are from “The Hitchhiker’s Guide to Python” by Kenneth Reitz and Tanya Schlusser.</p>
+</div>
+</div>
+<div class="section" id="quick-start">
+<span id="id1"></span><h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
+<p>To start a new project, say ‘my_project’, just type on the command line</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">skelpy</span> <span class="n">my_project</span>
+</pre></div>
+</div>
+<p>This will create a new folder <code class="docutils literal notranslate"><span class="pre">my_project</span></code> under the current directory and
+fill the directory with sub-directories and configuration files like below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&#39;basic&#39; format(default)                   &#39;src&#39; format
+
+my_project/                               my_project/
+├── docs/                                 ├── docs/
+│   ├── _build/                           │   ├── _build/
+│   ├── _static/                          │   ├── _static/
+│   ├── _templates/                       │   ├── _templates/
+│   ├── conf.py                           │   ├── conf.py
+│   ├── index.rst                         │   ├── index.rst
+│   ├── make.bat                          │   ├── make.bat
+│   └── Makefile                          │   └── Makefile
+├── my_project/                           ├── src/
+│   ├── __init__.py                       │   └── my_project/
+│   └── main.py                           │       ├── __init__.py
+├── tests/                                │       └── main.py
+│    └── test_main.py                     ├── tests/
+├── LICENSE                               │    └── test_main.py
+├── README.rst                            ├── LICENSE
+├── setup.cfg                             ├── README.rst
+└── setup.py                              ├── setup.cfg
+                                          └── setup.py
+</pre></div>
+</div>
+<p>You can choose which tructure to use with the <code class="docutils literal notranslate"><span class="pre">--format/-f</span></code> option.
+Also, if you do not provide the project name, <em>skelpy</em> will consider
+the current directory name(the last component of the current working directory)
+to be the project name.</p>
+<p>For more options, See <code class="docutils literal notranslate"><span class="pre">skelpy</span> <span class="pre">-h</span></code></p>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p><em>skelpy</em> is under the <a class="reference external" href="https://choosealicense.com/licenses/mit/">MIT</a> license.</p>
+</div>
+<div class="section" id="author">
+<h2>Author<a class="headerlink" href="#author" title="Permalink to this headline">¶</a></h2>
+<p>dks &lt;<a class="reference external" href="mailto:june3474&#37;&#52;&#48;gmail&#46;com">june3474<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</p>
+</div>
+<div class="section" id="change-log">
+<h2>Change Log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h2>
+<p>## [1.0.rc0] - 2019-04-13</p>
+<p>## [1.0.0]   - 2019-05-31</p>
+</div>
+<div class="section" id="packages-modules">
+<h2>Packages &amp; Modules<a class="headerlink" href="#packages-modules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/skelpy.html">skelpy package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/skelpy.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/skelpy.makers.html">skelpy.makers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/skelpy.templates.html">skelpy.templates package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/skelpy.utils.html">skelpy.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/skelpy.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/skelpy.html#module-skelpy.main">skelpy.main module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">skelpy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="api/modules.html" title="next chapter">skelpy</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, dks.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
