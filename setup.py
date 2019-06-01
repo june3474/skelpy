@@ -58,7 +58,6 @@ setup(
     author='dks',
     author_email='june3474@gmail.com',
     description='A simple template tool to create the skeleton for a python project',
-    license='MIT',
     package_dir={'': '.'},
     packages=find_packages(where='.', exclude=['docs', 'tests', 'tests.*']),
     # include_package_data with MENIFEST.in does not work. why?
@@ -90,6 +89,7 @@ setup(
     },
     classifiers=[
         'Environment :: Console',
+        'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
