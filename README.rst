@@ -128,6 +128,11 @@ Change Log
 
 ## [1.0.0]   - 2019-05-31
 
+Reference
+=========
+Reference is available at 
+`https://june3474.github.io/skelpy/api/modules.html <https://june3474.github.io/skelpy/api/modules.html>`_
+
 .. _Pyscaffold: https://pyscaffold.org/en/latest/
 .. _Cookiecutter: https://cookiecutter.readthedocs.org/
 .. _MIT: https://choosealicense.com/licenses/mit/
