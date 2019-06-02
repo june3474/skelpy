@@ -68,7 +68,7 @@ you can directly run the zip file as if it were a python module like below::
 Or, if you use Linux or any POSIX-compatible OS, you can make the zip file an executable::
 
     $ echo '#!/usr/bin/env python' > skelpy
-    $ cat skelpy-master.zip >> skelpy
+    $ cat skelpy.zip >> skelpy
     $ chmod u+x skelpy
 
 Codes above are from "The Hitchhiker's Guide to Python" by Kenneth Reitz and Tanya Schlusser.
