@@ -107,7 +107,7 @@ fill the directory with sub-directories and configuration files like below::
     └── setup.py                              ├── setup.cfg
                                               └── setup.py
 
-You can choose which tructure to use with the ``--format/-f`` option.
+You can choose which structure to use with the ``--format/-f`` option.
 Also, if you do not provide the project name, *skelpy* will consider
 the current directory name(the last component of the current working directory)
 to be the project name.
