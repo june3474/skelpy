@@ -64,6 +64,7 @@ def test_create_package_dir(mocked_mkdir, mocked_makedirs, maker1, maker2):
         assert maker1._create_package_dir() == -1
         mocked_mkdir.assert_not_called()
         mocked_makedirs.assert_not_called()
+        maker1.merge = False
     with mock.patch('os.path.exists', return_value=False):
         # merge == False && format == 'src'
         assert maker2._create_package_dir() == 1
@@ -74,6 +75,8 @@ def test_create_package_dir(mocked_mkdir, mocked_makedirs, maker1, maker2):
         assert maker2._create_package_dir() == 1
         mocked_mkdir.assert_not_called()
         assert mocked_makedirs.called
+        maker2.merge = False
+        mocked_makedirs.call_count = 0
 
 
 @mock.patch('os.fsync')
