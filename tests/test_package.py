@@ -91,6 +91,7 @@ def test_write_init(mocked_fsync, maker1):
             maker1.force = True
             assert maker1._write_init()
             assert mocked_open().write.called
+            maker1.force = False
         with mock.patch('os.path.exists', return_value=False):
             # not exist
             assert maker1._write_init()
