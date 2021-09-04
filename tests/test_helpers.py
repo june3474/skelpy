@@ -43,7 +43,7 @@ expected = ("#!/usr/bin/env python - shebang will remain.\n"
             "    # Environment :: Win32 (MS Windows) # what about this?\n")
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='function')
 def test_file():
     testFile = os.path.join(gettempdir(), 'test_file')
     with open(testFile, 'wt') as f:
